@@ -11,11 +11,15 @@ var genPath = "./src/assets/gen";
 var jsSrc = function (isRelease) {
     var libs = gulp.src([
         assetPath + "/libs/jquery/jquery-1.11.3.min.js",
-        assetPath + "/libs/bootstrap/js/bootstrap.min.js"
+        assetPath + "/libs/bootstrap/js/bootstrap.min.js",
+        assetPath + "/libs/angularjs/angular.min.js",
+        assetPath + "/libs/angular-resource.min.js",
+        assetPath + "/libs/angular-ui-router.min.js"
     ]);
 
     var custom = gulp.src([
-        assetPath + "/js/main.js"
+        assetPath + "/js/config.js",
+        assetPath + "/js/controllers/*.js"
     ]);
 
     return streamqueue({ objectMode: true })

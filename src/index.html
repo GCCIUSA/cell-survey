@@ -1,15 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
     <meta charset="UTF-8">
-    <title>GCCI USA</title>
+    <title>GCCI Cell Survey</title>
 
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="assets/gen/css/app.min.css"/>
 </head>
-<body>
+<body ng-controller="MainCtrl as main">
 
-    test
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>序號</th>
+                <th>評估分數/評估項目</th>
+                <th ng-repeat="score in [0,1,2,3,4]">{{::score}}分</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="category in ::main.survey">
+                <td colspan="8" class="category">{{::category.title}}</td>
+            </tr>
+            <tr ng-repeat="item in category.items">
+                <td>{{::$index + 1}}</td>
+                <td>{{::item.item}}</td>
+                <td ng-repeat="option in ::item.options track by $index">
+                    <a href="" ng-click="toggleItem($index)">{{::option}}</a>
+                </td>
+            </tr>
+            <tr ng-repeat-end></tr>
+            </tbody>
+        </table>
+    </div>
     
 <script type="text/javascript" src="assets/gen/js/app.js"></script>
 </body>
