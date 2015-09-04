@@ -45,7 +45,8 @@ gulp.task("js-release", function () {
  */
 gulp.task("css", function () {
     var libs = gulp.src([
-        assetPath + "/libs/bootstrap/css/bootstrap.min.css"
+        assetPath + "/libs/bootstrap/css/bootstrap.min.css",
+        assetPath + "/libs/font-awesome/css/font-awesome.min.css"
     ]);
     var custom = gulp.src([
         assetPath + "/css/main.css"

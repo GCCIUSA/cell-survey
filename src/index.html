@@ -10,6 +10,7 @@
 <body ng-controller="MainCtrl as main">
 
     <div class="container">
+        <div>總分數 {{main.totalScore}}</div>
         <table class="table">
             <thead>
             <tr>
@@ -26,7 +27,8 @@
                 <td>{{::$index + 1}}</td>
                 <td>{{::item.item}}</td>
                 <td ng-repeat="option in ::item.options track by $index">
-                    <a href="" ng-click="toggleItem($index)">{{::option}}</a>
+                    <a href="" ng-click="main.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
+                    <i class="fa fa-check text-success" ng-if="main.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
                 </td>
             </tr>
             <tr ng-repeat-end></tr>
