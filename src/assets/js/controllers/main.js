@@ -1,59 +1,10 @@
-app.controller("MainCtrl", [
-    function () {
+app.controller("MainCtrl", ["$http",
+    function ($http) {
         var vm = this;
 
-        vm.survey = [
-            {
-                "title": "小家聚會",
-                "items": [
-                    {
-                        "item": "小家聚會是否按5W進行",
-                        "options": [
-                            "1W或沒有",
-                            "只做2W",
-                            "只做3W",
-                            "只做4W",
-                            "完全按5W"
-                        ]
-                    },
-                    {
-                        "item": "小家聚會是否事先安排服事計劃表",
-                        "options": [
-                            "臨時安排",
-                            "",
-                            "每周安排",
-                            "",
-                            "每月安排"
-                        ]
-                    }
-                ]
-            },
-            {
-                "title": "小組架構",
-                "items": [
-                    {
-                        "item": "是否有實習小組長人選",
-                        "options": [
-                            "沒有",
-                            "",
-                            "1位",
-                            "",
-                            "2位或以上"
-                        ]
-                    },
-                    {
-                        "item": "是否有核心同工",
-                        "options": [
-                            "沒有",
-                            "1位",
-                            "2位",
-                            "",
-                            "3位或以上"
-                        ]
-                    }
-                ]
-            }
-        ];
+        $http.get("survey.json").then(function (response) {
+            vm.survey = response.data;
+        });
 
         vm.answers = [];
         vm.select = function (categoryIndex, itemIndex, optionIndex) {
@@ -80,7 +31,7 @@ app.controller("MainCtrl", [
         vm.totalScore = function () {
             var score = 0;
             for (var i = 0; i < vm.answers.length; i++) {
-                score += vm.answers[i].split(",")[2];
+                score += parseInt(vm.answers[i].split(",")[2]);
             }
 
             return score;

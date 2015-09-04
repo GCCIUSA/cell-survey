@@ -10,18 +10,18 @@
 <body ng-controller="MainCtrl as main">
 
     <div class="container">
-        <div>總分數 {{main.totalScore}}</div>
+        <div>總分數 {{main.totalScore()}}</div>
         <table class="table">
             <thead>
             <tr>
                 <th>序號</th>
                 <th>評估分數/評估項目</th>
-                <th ng-repeat="score in [0,1,2,3,4]">{{::score}}分</th>
+                <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}分</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat-start="category in ::main.survey">
-                <td colspan="8" class="category">{{::category.title}}</td>
+                <td colspan="8" class="category" align="left">{{::category.title}}</td>
             </tr>
             <tr ng-repeat="item in category.items">
                 <td>{{::$index + 1}}</td>
