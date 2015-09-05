@@ -12,14 +12,16 @@ var jsSrc = function (isRelease) {
     var libs = gulp.src([
         assetPath + "/libs/jquery/jquery-1.11.3.min.js",
         assetPath + "/libs/bootstrap/js/bootstrap.min.js",
-        assetPath + "/libs/angularjs/angular.min.js",
-        assetPath + "/libs/angular-resource.min.js",
-        assetPath + "/libs/angular-ui-router.min.js"
+        assetPath + "/libs/angular/angular.min.js",
+        assetPath + "/libs/angular/angular-resource.min.js",
+        assetPath + "/libs/angular/angular-sanitize.min.js",
+        assetPath + "/libs/angular/angular-ui-router.min.js"
     ]);
 
     var custom = gulp.src([
         assetPath + "/js/config.js",
-        assetPath + "/js/controllers/*.js"
+        assetPath + "/js/controllers/*.js",
+        assetPath + "/js/directives/*.js"
     ]);
 
     return streamqueue({ objectMode: true })
@@ -49,8 +51,9 @@ gulp.task("css", function () {
         assetPath + "/libs/font-awesome/css/font-awesome.min.css"
     ]);
     var custom = gulp.src([
-        assetPath + "/css/main.css"
+        assetPath + "/less/main.less"
     ])
+        .pipe(plugins.less())
         .pipe(plugins.autoprefixer())
         .pipe(plugins.minifyCss());
 
