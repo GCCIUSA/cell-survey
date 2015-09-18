@@ -9,13 +9,13 @@ app.controller("MainCtrl", ["$http", "$rootScope",
 
             // count total items
             for (var i = 0; i < vm.survey.length; i++) {
-                for (var j = 0; j < vm.survey[i].items.length; j++) {
-                    totalItemCnt++;
-                }
+                totalItemCnt += vm.survey[i].items.length;
             }
         });
 
         // user selects(check/uncheck) an item and calculate total score
+        // answers are string array in the format of i,j,k
+        // i - category index, j - item index, k - option index
         vm.answers = [];
         vm.totalScore = 0;
         vm.select = function (categoryIndex, itemIndex, optionIndex) {
