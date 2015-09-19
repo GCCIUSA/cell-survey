@@ -53,7 +53,7 @@
         <div class="pull-right">總分數 {{main.totalScore}}</div>
         <div class="clearfix"></div>
     </div>
-    <table class="table">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>序號</th>
@@ -92,6 +92,8 @@
               message-title="{{gcciMessage.title}}"
               message-body="{{gcciMessage.body}}"
               message-callback="gcciMessage.callback()"></gcci-message>
+
+<gcci-login login-toggle="" login-callback=""></gcci-login>
 
 <script type="text/javascript" src="assets/gen/js/app.js"></script>
 </body>

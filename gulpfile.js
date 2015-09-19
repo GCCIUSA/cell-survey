@@ -73,7 +73,7 @@ gulp.task("fonts", function () {
 /**
  * watch tasks
  */
-gulp.task("watch", function () {
+gulp.task("watch", ["compile"], function () {
     var reload = function (e) {
         setTimeout(function () {
             plugins.livereload.changed(e);
