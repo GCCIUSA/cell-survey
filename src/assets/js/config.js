@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ngSanitize"]);
+var app = angular.module("app", ["ngSanitize", "ui.router"]);
 
 app.run(["$rootScope",
     function ($rootScope) {

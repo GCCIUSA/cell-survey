@@ -20,8 +20,9 @@ var jsSrc = function (isRelease) {
 
     var custom = gulp.src([
         assetPath + "/js/config.js",
-        assetPath + "/js/controllers/*.js",
-        assetPath + "/js/directives/*.js"
+        assetPath + "/js/router.js",
+        assetPath + "/js/directives/*.js",
+        assetPath + "/js/controllers/*.js"
     ]);
 
     return streamqueue({ objectMode: true })
@@ -71,6 +72,11 @@ gulp.task("fonts", function () {
 });
 
 /**
+ * compile all tasks
+ */
+gulp.task("compile", ["css", "fonts", "js-dev", "js-release"]);
+
+/**
  * watch tasks
  */
 gulp.task("watch", ["compile"], function () {
@@ -85,8 +91,3 @@ gulp.task("watch", ["compile"], function () {
     gulp.watch(assetPath + "/js/**/*.js", ["js-dev"]).on("change", reload);
     gulp.watch(["src/**/*.html"]).on("change", reload);
 });
-
-/**
- * compile all tasks
- */
-gulp.task("compile", ["css", "fonts", "js-dev", "js-release"]);

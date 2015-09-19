@@ -19,72 +19,28 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GCCI Cell Survey</a>
+            <a class="navbar-brand" href="">GCCI Cell Survey</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
+                <li><a ui-sref="home">Home</a></li>
+                <li><a ui-sref="survey">Survey</a></li>
+                <li><a ui-sref="report">Report</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="../navbar/">Default</a></li>
-                <li><a href="../navbar-static-top/">Static top</a></li>
-                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Peter <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="">Log Out</a></li>
+                    </ul>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
 
 <div class="container">
-    <div class="alert alert-success">
-        <div class="pull-right">總分數 {{main.totalScore}}</div>
-        <div class="clearfix"></div>
-    </div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>序號</th>
-            <th>評估分數/評估項目</th>
-            <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}分</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- categories -->
-        <tr ng-repeat-start="category in ::main.survey">
-            <td colspan="8" class="category" align="left">{{::category.title}}</td>
-        </tr>
-        <!-- items -->
-        <tr ng-repeat="item in ::category.items">
-            <td>{{::$index + 1}}</td>
-            <td>{{::item.item}}</td>
-            <!-- options -->
-            <td ng-repeat="option in ::item.options track by $index">
-                <a href="" ng-click="main.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
-                <i class="fa fa-check text-success" ng-if="main.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
-            </td>
-        </tr>
-        <tr ng-repeat-end></tr>
-        </tbody>
-    </table>
-    <div class="alert alert-success">
-        <div class="pull-right">總分數 {{main.totalScore}}</div>
-        <div class="clearfix"></div>
-    </div>
-    <hr/>
-    <button class="btn btn-primary" ng-click="main.submitSurvey()">Submit Survey</button>
+    <ui-view></ui-view>
 </div>
 
 <gcci-message message-toggle="gcciMessage.toggle"
