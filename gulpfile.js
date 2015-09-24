@@ -23,7 +23,8 @@ var jsSrc = function (isRelease) {
         assetPath + "/js/router.js",
         assetPath + "/js/directives/*.js",
         assetPath + "/js/controllers/*.js"
-    ]);
+    ])
+        .pipe(plugins.babel());
 
     return streamqueue({ objectMode: true })
         .queue(libs)

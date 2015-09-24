@@ -1,15 +1,16 @@
+class MainCtrl {
+    constructor() {
+
+    }
+}
+
+class HomeCtrl {
+    constructor() {
+
+    }
+}
+
 app
-    .controller("MainCtrl", [
-        function () {
-            var vm = this;
-
-
-        }
-    ])
-
-    .controller("HomeCtrl", [
-        function () {
-            var vm = this;
-        }
-    ])
+    .controller("MainCtrl", MainCtrl)
+    .controller("HomeCtrl", HomeCtrl)
 ;

@@ -1,9 +1,7 @@
-app
-    .controller("ReportCtrl", [
-        function () {
-            var vm = this;
+class ReportCtrl {
+    constructor() {
 
+    }
+}
 
-        }
-    ])
-;
+app.controller("ReportCtrl", ReportCtrl);

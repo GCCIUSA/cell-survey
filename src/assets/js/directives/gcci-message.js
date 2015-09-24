@@ -1,20 +1,20 @@
-app.directive("gcciMessage", function () {
+app.directive("gcciMessage", () => {
     return {
         "restrict": "E",
         "scope": { "messageToggle": "=", "messageType": "@", "messageCallback": "&", "messageTitle": "@", "messageBody": "@" },
         "templateUrl": "gcci-message.html",
-        "link": function (scope, elem) {
-            var modal = elem.find("> div.modal");
+        "link": (scope, elem) => {
+            let modal = elem.find("> div.modal");
 
-            modal.on("hidden.bs.modal", function () {
-                scope.$apply(function () {
+            modal.on("hidden.bs.modal", () => {
+                scope.$apply(() => {
                     scope.messageToggle = false;
                     scope.messageCallback();
                 });
             });
 
-            scope.$watch("messageToggle", function (newVal) {
-                modal.modal(newVal ? "show" : "hide");
+            scope.$watch("messageToggle", (newVal) => {
+                if (newVal) modal.modal("show");
             });
         }
     };

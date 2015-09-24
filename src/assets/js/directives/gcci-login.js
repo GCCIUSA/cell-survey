@@ -1,20 +1,20 @@
-app.directive("gcciLogin", function () {
+app.directive("gcciLogin", () => {
     return {
         "restrict": "E",
         "scope": { "loginToggle": "=", "loginCallback": "&" },
         "templateUrl": "gcci-login.html",
-        "link": function (scope, elem) {
-            var modal = elem.find("> div.modal");
+        "link": (scope, elem) => {
+            let modal = elem.find("> div.modal");
 
-            modal.on("hidden.bs.modal", function () {
-                scope.$apply(function () {
+            modal.on("hidden.bs.modal", () => {
+                scope.$apply(() => {
                     scope.loginToggle = false;
                     scope.loginCallback();
                 });
             });
 
-            scope.$watch("loginToggle", function (newVal) {
-                modal.modal(newVal ? "show" : "hide");
+            scope.$watch("loginToggle", (newVal) => {
+                if (newVal) modal.modal("show");
             });
         }
     };

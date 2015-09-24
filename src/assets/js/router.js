@@ -1,6 +1,6 @@
 app
     .config(["$stateProvider", "$urlRouterProvider", "$uiViewScrollProvider",
-        function ($stateProvider, $urlRouterProvider, $uiViewScrollProvider) {
+        ($stateProvider, $urlRouterProvider, $uiViewScrollProvider) => {
             $uiViewScrollProvider.useAnchorScroll();
             $urlRouterProvider.otherwise("/home");
 

@@ -1,14 +1,14 @@
 app.controller("SurveyCtrl", ["$http", "$rootScope",
-    function ($http, $rootScope) {
-        var vm = this;
+    ($http, $rootScope) => {
+        let vm = this;
 
         // get survey data
-        var totalItemCnt = 0;
-        $http.get("survey.json").then(function (response) {
+        let totalItemCnt = 0;
+        $http.get("survey.json").then((response) => {
             vm.survey = response.data;
 
             // count total items
-            for (var i = 0; i < vm.survey.length; i++) {
+            for (let i = 0; i < vm.survey.length; i++) {
                 totalItemCnt += vm.survey[i].items.length;
             }
         });
@@ -18,7 +18,7 @@ app.controller("SurveyCtrl", ["$http", "$rootScope",
         // i - category index, j - item index, k - option index
         vm.answers = [];
         vm.totalScore = 0;
-        vm.select = function (categoryIndex, itemIndex, optionIndex) {
+        vm.select = (categoryIndex, itemIndex, optionIndex) => {
             var answer = categoryIndex + "," + itemIndex + "," + optionIndex;
 
             // remove answer
@@ -28,9 +28,9 @@ app.controller("SurveyCtrl", ["$http", "$rootScope",
             }
             else {
                 // select different option
-                var itemFound = false;
-                for (var i = 0; i < vm.answers.length; i++) {
-                    var answerSplit = vm.answers[i].split(",");
+                let itemFound = false;
+                for (let i = 0; i < vm.answers.length; i++) {
+                    let answerSplit = vm.answers[i].split(",");
                     if (categoryIndex === parseInt(answerSplit[0]) && itemIndex === parseInt(answerSplit[1])) {
                         vm.totalScore -= answerSplit[2];
                         vm.answers[i] = answer;
@@ -48,16 +48,16 @@ app.controller("SurveyCtrl", ["$http", "$rootScope",
         };
 
         // if an answer is selected
-        vm.isSelectedAnswer = function (categoryIndex, itemIndex, optionIndex) {
-            var answer = categoryIndex + "," + itemIndex + "," + optionIndex;
+        vm.isSelectedAnswer = (categoryIndex, itemIndex, optionIndex) => {
+            let answer = categoryIndex + "," + itemIndex + "," + optionIndex;
             return vm.answers.indexOf(answer) >= 0;
         };
 
-        vm.submitSurvey = function () {
+        vm.submitSurvey = () => {
             validateSurvey();
         };
 
-        var validateSurvey = function () {
+        var validateSurvey = () => {
             // check total item count
             if (vm.answers.length !== totalItemCnt) {
                 $rootScope.gcciMessage = {
