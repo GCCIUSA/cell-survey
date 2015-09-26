@@ -9,5 +9,10 @@
 1. clone repository
 2. navigate into directory
 3. run `npm install` to install node.js modules
-4. run `gulp compile` to manually compile and minify js/css files
-5. run `gulp watch` to watch any file changes and compile them automatically
+4. compile static files
+  - run `gulp compile` to manually compile files
+  - run `gulp watch` to watch any file change and compile automatically
+
+## Local Server
+1. run `node server` to start local server
+2. launch browser and access the site `http://localhost:8080`
