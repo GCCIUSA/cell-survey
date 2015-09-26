@@ -1,7 +1,5 @@
-class ReportCtrl {
+export class ReportCtrl {
     constructor() {
 
     }
 }
-
-app.controller("ReportCtrl", ReportCtrl);

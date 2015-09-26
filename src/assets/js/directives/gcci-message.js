@@ -1,4 +1,4 @@
-app.directive("gcciMessage", () => {
+export function gcciMessage() {
     return {
         "restrict": "E",
         "scope": { "messageToggle": "=", "messageType": "@", "messageCallback": "&", "messageTitle": "@", "messageBody": "@" },
@@ -18,4 +18,4 @@ app.directive("gcciMessage", () => {
             });
         }
     };
-});
+}

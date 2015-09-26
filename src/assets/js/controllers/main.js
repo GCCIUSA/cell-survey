@@ -1,16 +1,11 @@
-class MainCtrl {
+export class MainCtrl {
     constructor() {
 
     }
 }
 
-class HomeCtrl {
+export class HomeCtrl {
     constructor() {
 
     }
 }
-
-app
-    .controller("MainCtrl", MainCtrl)
-    .controller("HomeCtrl", HomeCtrl)
-;

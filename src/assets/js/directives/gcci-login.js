@@ -1,7 +1,7 @@
-app.directive("gcciLogin", () => {
+export function gcciLogin() {
     return {
         "restrict": "E",
-        "scope": { "loginToggle": "=", "loginCallback": "&" },
+        "scope": {"loginToggle": "=", "loginCallback": "&"},
         "templateUrl": "gcci-login.html",
         "link": (scope, elem) => {
             let modal = elem.find("> div.modal");
@@ -17,5 +17,5 @@ app.directive("gcciLogin", () => {
                 if (newVal) modal.modal("show");
             });
         }
-    };
-});
+    }
+}

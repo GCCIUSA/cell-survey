@@ -1,8 +1,12 @@
 var gulp = require("gulp"),
     plugins = require("gulp-load-plugins")(),
-    streamqueue = require("streamqueue");
+    streamqueue = require("streamqueue"),
+    browserify = require("browserify"),
+    babelify = require("babelify"),
+    source = require("vinyl-source-stream"),
+    buffer = require("vinyl-buffer");
 
-var assetPath = "src/assets";
+var assetPath = "./src/assets";
 var genPath = "./src/assets/gen";
 
 /**
@@ -18,13 +22,11 @@ var jsSrc = function (isRelease) {
         assetPath + "/libs/angular/angular-ui-router.min.js"
     ]);
 
-    var custom = gulp.src([
-        assetPath + "/js/config.js",
-        assetPath + "/js/router.js",
-        assetPath + "/js/directives/*.js",
-        assetPath + "/js/controllers/*.js"
-    ])
-        .pipe(plugins.babel());
+    var custom = browserify(assetPath + "/js/config.js")
+        .transform(babelify)
+        .bundle()
+        .pipe(source("custom.js"))
+        .pipe(buffer());
 
     return streamqueue({ objectMode: true })
         .queue(libs)

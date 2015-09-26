@@ -1,18 +1,18 @@
 <div class="alert alert-success">
-    <div class="pull-right">??? {{main.totalScore}}</div>
+    <div class="pull-right">總分數 {{survey.totalScore}}</div>
     <div class="clearfix"></div>
 </div>
 <table class="table table-hover">
     <thead>
     <tr>
-        <th>??</th>
-        <th>????/????</th>
-        <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}?</th>
+        <th>序號</th>
+        <th>評估項目\分數</th>
+        <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}分</th>
     </tr>
     </thead>
     <tbody>
     <!-- categories -->
-    <tr ng-repeat-start="category in ::main.survey">
+    <tr ng-repeat-start="category in ::survey.survey">
         <td colspan="8" class="category" align="left">{{::category.title}}</td>
     </tr>
     <!-- items -->
@@ -21,16 +21,16 @@
         <td>{{::item.item}}</td>
         <!-- options -->
         <td ng-repeat="option in ::item.options track by $index">
-            <a href="" ng-click="main.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
-            <i class="fa fa-check text-success" ng-if="main.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
+            <a href="" ng-click="survey.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
+            <i class="fa fa-check text-success" ng-if="survey.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
         </td>
     </tr>
     <tr ng-repeat-end></tr>
     </tbody>
 </table>
 <div class="alert alert-success">
-    <div class="pull-right">??? {{main.totalScore}}</div>
+    <div class="pull-right">總分數 {{survey.totalScore}}</div>
     <div class="clearfix"></div>
 </div>
 <hr/>
-<button class="btn btn-primary" ng-click="main.submitSurvey()">Submit Survey</button>
+<button class="btn btn-primary" ng-click="survey.submitSurvey()">Submit Survey</button>
