@@ -1,0 +1,9 @@
+[
+  {
+    "cellId": 1,
+    "surveyId": 1,
+    "submitted_time": "<datetime>",
+    "submitted_user": "user_id",
+    "answers": []
+  }
+]

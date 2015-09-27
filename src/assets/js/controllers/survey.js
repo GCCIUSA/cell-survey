@@ -1,7 +1,8 @@
 export class SurveyCtrl {
-    constructor($http, $rootScope) {
+    constructor($http, $rootScope, api) {
         this.$http = $http;
         this.$rootScope = $rootScope;
+        this.api = api;
 
         // answers are string array in the format of i,j,k
         // i - category index, j - item index, k - option index
@@ -114,4 +115,4 @@ export class SurveyCtrl {
     }
 }
 
-SurveyCtrl.$inject = ["$http", "$rootScope"];
+SurveyCtrl.$inject = ["$http", "$rootScope", "api"];

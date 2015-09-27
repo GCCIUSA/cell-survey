@@ -1,15 +1,14 @@
 {
-  "name": "gcci-www",
+  "name": "gcci-cell-survey",
   "version": "1.0.0",
-  "description": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pzmosquito/gcci-www.git"
+    "url": "git@github.com:pzmosquito/gcci-cell-survey.git"
   },
-  "author": "",
+  "author": "gcci",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pzmosquito/gcci-www/issues"
+    "url": "https://github.com/pzmosquito/gcci-cell-survey/issues"
   },
   "devDependencies": {
     "babelify": "^6.3.0",

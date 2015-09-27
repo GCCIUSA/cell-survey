@@ -19,7 +19,9 @@ var jsSrc = function (isRelease) {
         assetPath + "/libs/angular/angular.min.js",
         assetPath + "/libs/angular/angular-resource.min.js",
         assetPath + "/libs/angular/angular-sanitize.min.js",
-        assetPath + "/libs/angular/angular-ui-router.min.js"
+        assetPath + "/libs/angular/angular-ui-router.min.js",
+        assetPath + "/libs/firebase/firebase.js",
+        assetPath + "/libs/firebase/angularfire.min.js"
     ]);
 
     var custom = browserify(assetPath + "/js/config.js")
