@@ -13,7 +13,10 @@
     </tr>
     <!-- items -->
     <tr ng-repeat="item in ::category.items">
-        <td>{{::$index + 1}}</td>
+        <td>
+            {{::$parent.$index * category.items.length + $index + 1}}
+            <i class="fa fa-check text-muted" ng-if="survey.isItemSelected($parent.$index, $index)"></i>
+        </td>
         <td>{{::item.item}}</td>
         <!-- options -->
         <td ng-repeat="option in ::item.options track by $index">

@@ -79,6 +79,13 @@ export class SurveyCtrl {
     }
 
     /**
+     * determines if an item has answer selected
+     */
+    isItemSelected(categoryIndex, itemIndex) {
+        return this.answers.find(x => x.indexOf(`${categoryIndex},${itemIndex},`) >= 0);
+    }
+
+    /**
      * cacluate total score
      */
     getTotalScore() {
