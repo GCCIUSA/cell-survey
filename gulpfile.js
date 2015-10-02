@@ -14,7 +14,7 @@ var genPath = "./src/assets/gen";
  */
 var jsSrc = function (isRelease) {
     var libs = gulp.src([
-        assetPath + "/libs/jquery/jquery-1.11.3.min.js",
+        assetPath + "/libs/jquery/jquery-2.1.4.min.js",
         assetPath + "/libs/bootstrap/js/bootstrap.min.js",
         assetPath + "/libs/angular/angular.min.js",
         assetPath + "/libs/angular/angular-resource.min.js",
