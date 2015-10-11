@@ -1,30 +1,42 @@
 export class API {
-    constructor($firebase) {
-        this.$firebase = $firebase;
+    constructor(fbUrl, $firebaseArray, $firebaseAuth, $state) {
+        this.$state = $state;
 
-        this.ref = new Firebase("https://gcci-cell-survey.firebaseio.com");
+        let ref = new Firebase(fbUrl);
+        this.fbArray = $firebaseArray(ref);
+        this.fbAuth = $firebaseAuth(ref);
+    }
+
+    getAuth() {
+        return this.fbAuth.$getAuth();
+    }
+
+    login(toState = void 0, toParams = {}) {
+        this.fbAuth.$authWithOAuthPopup("google", {"hd": "thegcci.org"}).then(() => {
+            if (toState) { this.$state.go(toState, toParams); }
+        }).catch(() => {
+            alert("User Login Failed");
+        });
+    }
+
+    logout() {
+        return this.fbAuth.$unauth();
     }
 
     /**
-     * retrieve a sinlge survey
+     * submit a survey answers
      */
-    get(surveyId) {
-        return this.$firebase(this.ref.child(surveyId)).$asObject();
-    }
-
-    /**
-     * retrieve all survey based on user permission
-     */
-    getAll() {
-
-    }
-
-    /**
-     * update a single survey record
-     */
-    update(surveyId) {
+    submitSurvey(answers) {
+        this.fbArray.$add({
+            "user": "peter.zhang@thegcci.org",
+            "answers": answers
+        }).then((ref) => {
+            let id = ref.key();
+            console.log("record added: " + id);
+            console.log(this.fbArray.$indexFor(id));
+        });
 
     }
 }
 
-API.$inject = ["$firebase"];
+API.$inject = ["fbUrl", "$firebaseArray", "$firebaseAuth", "$state"];

@@ -23,15 +23,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a ui-sref="home">Home</a></li>
-                <li><a ui-sref="survey">Survey</a></li>
-                <li><a ui-sref="report">Report</a></li>
+                <li ng-repeat="navItem in ::main.navItems" ng-class="{'active': main.isActiveNav(navItem.state)}">
+                    <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
+                </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Peter <span class="caret"></span></a>
+            <ul class="nav navbar-nav navbar-right" ng-switch on="main.isLoggedIn()">
+                <li class="dropdown" ng-switch-when="true">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {{main.getUserDisplayName()}}
+                        <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="">Log Out</a></li>
+                        <li><a href="" ng-click="main.logout()">Log Out</a></li>
                     </ul>
                 </li>
             </ul>

@@ -101,7 +101,9 @@ export class SurveyCtrl {
      */
     submitSurvey() {
         // validate survey before submitting
-        this.validateSurvey();
+        if (this.validateSurvey()) {
+            this.api.submitSurvey(this.answers);
+        }
     }
 
     /**

@@ -16,7 +16,8 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
         .state("survey", {
             "url": "/survey",
             "templateUrl": url("survey"),
-            "controller": "SurveyCtrl as survey"
+            "controller": "SurveyCtrl as survey",
+            "resolve": {}
         })
 
         .state("report", {
