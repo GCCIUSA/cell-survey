@@ -2,9 +2,9 @@ export class API {
     constructor(fbUrl, $firebaseArray, $firebaseAuth, $state) {
         this.$state = $state;
 
-        let ref = new Firebase(fbUrl);
-        this.fbArray = $firebaseArray(ref);
-        this.fbAuth = $firebaseAuth(ref);
+        this.ref = new Firebase(fbUrl);
+        this.fbArray = $firebaseArray(this.ref);
+        this.fbAuth = $firebaseAuth(this.ref);
     }
 
     /**
@@ -37,9 +37,20 @@ export class API {
     }
 
     /**
+     * retrieve survey answers by user's email
+     */
+    getAnswersByUser(userEmail) {
+        let data = [];
+        this.ref.orderByChild("user_email").equalTo(userEmail).on("child_added", (snapshot) => {
+            data.push(snapshot.val());
+        });
+        return data;
+    }
+
+    /**
      * submit a survey answers
      */
-    submitSurvey(userEmail, answers) {
+    submitAnswers(userEmail, answers) {
         this.fbArray.$add({
             "user_email": userEmail,
             "add_date": new Date().getTime(),
@@ -47,7 +58,6 @@ export class API {
         }).then((ref) => {
             let id = ref.key();
             console.log("record added: " + id);
-            console.log(this.fbArray.$indexFor(id));
         });
 
     }
