@@ -7,18 +7,31 @@ export class API {
         this.fbAuth = $firebaseAuth(ref);
     }
 
+    /**
+     * get current authentication state
+     */
     getAuth() {
         return this.fbAuth.$getAuth();
     }
 
+    /**
+     * populate Google login page
+     */
     login(toState = void 0, toParams = {}) {
-        this.fbAuth.$authWithOAuthPopup("google", {"hd": "thegcci.org"}).then(() => {
+        let options = {
+            "scope": ["https://www.googleapis.com/auth/userinfo.email"].join(" "),
+            "hd": "thegcci.org"
+        };
+        this.fbAuth.$authWithOAuthPopup("google", options).then(() => {
             if (toState) { this.$state.go(toState, toParams); }
         }).catch(() => {
             alert("User Login Failed");
         });
     }
 
+    /**
+     * destroy current authentication state
+     */
     logout() {
         return this.fbAuth.$unauth();
     }
@@ -26,9 +39,10 @@ export class API {
     /**
      * submit a survey answers
      */
-    submitSurvey(answers) {
+    submitSurvey(userEmail, answers) {
         this.fbArray.$add({
-            "user": "peter.zhang@thegcci.org",
+            "user_email": userEmail,
+            "add_date": new Date().getTime(),
             "answers": answers
         }).then((ref) => {
             let id = ref.key();

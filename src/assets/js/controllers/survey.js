@@ -101,9 +101,9 @@ export class SurveyCtrl {
      */
     submitSurvey() {
         // validate survey before submitting
-        if (this.validateSurvey()) {
-            this.api.submitSurvey(this.answers);
-        }
+        //if (this.validateSurvey()) {
+            this.api.submitSurvey(this.$rootScope.user.google.email, this.answers);
+        //}
     }
 
     /**
