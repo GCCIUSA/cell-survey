@@ -13,6 +13,7 @@
   "devDependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
+    "firebase-tools": "^1.2.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-cli": "^0.3.0",
@@ -28,6 +29,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "firebase": "firebase"
   }
 }

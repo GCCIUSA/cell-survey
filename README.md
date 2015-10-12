@@ -14,3 +14,7 @@
 ## Local Server
 1. run `node server` to start local server
 2. launch browser and access the site `http://localhost:8080`
+
+## Deployment
+1. run `npm run firebase deploy`
+2. Launch browser and access the site `https://gcci-cell-survey.firebaseapp.com`
