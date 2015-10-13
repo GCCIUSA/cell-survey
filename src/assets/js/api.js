@@ -1,6 +1,7 @@
 export class API {
-    constructor(fbUrl, $firebaseArray, $firebaseAuth, $state) {
+    constructor(fbUrl, $firebaseArray, $firebaseAuth, $state, $q) {
         this.$state = $state;
+        this.$q = $q;
 
         this.ref = new Firebase(fbUrl);
         this.fbArray = $firebaseArray(this.ref);
@@ -37,30 +38,34 @@ export class API {
     }
 
     /**
-     * retrieve survey answers by user's email
+     * retrieve a survey record by user's email
      */
-    getAnswersByUser(userEmail) {
-        let data = [];
-        this.ref.orderByChild("user_email").equalTo(userEmail).on("child_added", (snapshot) => {
-            data.push(snapshot.val());
+    getSurveyByUser(uid) {
+        let deferred = this.$q.defer();
+        this.ref.orderByChild("uid").equalTo(uid).on("value", (snapshot) => {
+            // TODO added logic to get one record instead of all records
+            deferred.resolve(snapshot.val());
+
+            // cancel event callback
+            this.ref.off("value");
         });
-        return data;
+
+        return deferred.promise;
     }
 
     /**
-     * submit a survey answers
+     * submit a survey record
      */
-    submitAnswers(userEmail, answers) {
+    submitSurvey(uid, answers) {
         this.fbArray.$add({
-            "user_email": userEmail,
+            "uid": uid,
             "add_date": new Date().getTime(),
             "answers": answers
         }).then((ref) => {
             let id = ref.key();
             console.log("record added: " + id);
         });
-
     }
 }
 
-API.$inject = ["fbUrl", "$firebaseArray", "$firebaseAuth", "$state"];
+API.$inject = ["fbUrl", "$firebaseArray", "$firebaseAuth", "$state", "$q"];

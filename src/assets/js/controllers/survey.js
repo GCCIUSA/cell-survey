@@ -4,36 +4,40 @@ export class SurveyCtrl {
         this.$rootScope = $rootScope;
         this.api = api;
 
+        // total score
+        this.totalScore = 0;
+
         // answers are string array in the format of i,j,k
         // i - category index, j - item index, k - option index
         // example: ["0,1,1", "0,2,1"]
         this.answers = [];
 
-        // total score
-        this.totalScore = 0;
-
         this.init();
     }
 
     init() {
-        // TODO get existing answers
+        this.api.getSurveyByUser(this.$rootScope.user.uid).then((data) => {
+            if (data !== null) {
 
-        // get survey data
-        this.getSurvey();
+            }
+        });
+
+        // get survey form
+        this.getSurveyForm();
     }
 
     /**
      * get survey data
      */
-    getSurvey() {
+    getSurveyForm() {
         this.$http.get("survey.json").then(
             (response) => {
-                this.survey = response.data;
+                this.surveyForm = response.data;
 
                 // count total items
                 this.totalItemCnt = 0;
-                for (let i = 0; i < this.survey.length; i++) {
-                    this.totalItemCnt += this.survey[i].items.length;
+                for (let i = 0; i < this.surveyForm.length; i++) {
+                    this.totalItemCnt += this.surveyForm[i].items.length;
                 }
             }
         );
@@ -100,16 +104,16 @@ export class SurveyCtrl {
      * submit the survey
      */
     submitSurvey() {
-        // validate survey before submitting
-        //if (this.validateSurvey()) {
-            this.api.submitAnswers(this.$rootScope.user.google.email, this.answers);
+        // validate survey form before submitting
+        //if (this.validateSurveyForm()) {
+            this.api.submitSurvey(this.$rootScope.user.uid, this.answers);
         //}
     }
 
     /**
-     * validate survey
+     * validate survey form
      */
-    validateSurvey() {
+    validateSurveyForm() {
         // check total item count
         if (this.answers.length !== this.totalItemCnt) {
             this.$rootScope.gcciMessage = {

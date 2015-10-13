@@ -18,3 +18,8 @@
 ## Deployment
 1. run `npm run firebase deploy`
 2. Launch browser and access the site `https://gcci-cell-survey.firebaseapp.com`
+
+## Terminology
+- Survey Form - a form for user to fill out
+- Survey Answers - data that represents selected items on the survey form
+- Survey - includes form, answers and other data, such as date, uid
