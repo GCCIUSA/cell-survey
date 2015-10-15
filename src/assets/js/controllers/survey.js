@@ -43,8 +43,8 @@ export class SurveyCtrl {
 
                 // count total items
                 this.totalItemCnt = 0;
-                for (let i = 0; i < this.surveyForm.length; i++) {
-                    this.totalItemCnt += this.surveyForm[i].items.length;
+                for (let category of this.surveyForm) {
+                    this.totalItemCnt += category.items.length;
                 }
             }
         );
@@ -104,8 +104,8 @@ export class SurveyCtrl {
      */
     getTotalScore() {
         let totalScore = 0;
-        for (let i = 0; i < this.answers.length; i++) {
-            totalScore += parseInt(this.answers[i].split(",")[2]);
+        for (let answer of this.answers) {
+            totalScore += parseInt(answer.split(",")[2]);
         }
         this.totalScore = totalScore;
     }
