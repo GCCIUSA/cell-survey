@@ -43,7 +43,6 @@ export class API {
     getSurveyByUser(uid) {
         let deferred = this.$q.defer();
         this.ref.orderByChild("uid").equalTo(uid).on("value", (snapshot) => {
-            // TODO added logic to get one record instead of all records
             deferred.resolve(snapshot.val());
 
             // cancel event callback

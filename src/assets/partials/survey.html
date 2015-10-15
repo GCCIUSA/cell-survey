@@ -1,3 +1,6 @@
+<div class="alert alert-info">
+    You have submitted your survey. Thank you for your participation.
+</div>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -31,4 +34,4 @@
     <div class="pull-right">總分數 {{survey.totalScore}}</div>
     <div class="clearfix"></div>
 </div>
-<button class="btn btn-primary pull-right" ng-click="survey.submitSurvey()">Submit Survey</button>
+<button class="btn btn-primary pull-right" ng-click="survey.submitSurvey()" ng-if="!survey.submitted">Submit Survey</button>

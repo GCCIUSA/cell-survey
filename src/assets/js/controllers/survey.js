@@ -12,18 +12,25 @@ export class SurveyCtrl {
         // example: ["0,1,1", "0,2,1"]
         this.answers = [];
 
+        // if the survey has been submitted.
+        this.submitted = true;
+
         this.init();
     }
 
     init() {
         this.api.getSurveyByUser(this.$rootScope.user.uid).then((data) => {
-            if (data !== null) {
+            this.getSurveyForm();
 
+            if (data === null) {
+                this.submitted = false;
+            }
+            else {
+                let surveyKeys = Object.keys(data);
+                this.answers = data[surveyKeys[0]].answers;
+                this.getTotalScore();
             }
         });
-
-        // get survey form
-        this.getSurveyForm();
     }
 
     /**
@@ -47,6 +54,9 @@ export class SurveyCtrl {
      * selects(check/uncheck) an item
      */
     select(categoryIndex, itemIndex, optionIndex) {
+        if (this.submitted) {
+            return;
+        }
         let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
 
         let answerIndex = this.answers.indexOf(answer);
@@ -116,12 +126,11 @@ export class SurveyCtrl {
     validateSurveyForm() {
         // check total item count
         if (this.answers.length !== this.totalItemCnt) {
-            this.$rootScope.gcciMessage = {
-                "toggle": true,
-                "type": "danger",
-                "title": "Incomplete Survey",
-                "body": "Please fill out all items on the survey."
-            };
+            this.$rootScope.gcciMessage.alert(
+                "danger",
+                "Incomplete Survey",
+                "Please answer all questions on the survey."
+            );
             return false;
         }
         return true;

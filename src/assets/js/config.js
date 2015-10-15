@@ -1,5 +1,6 @@
 import { router } from './router';
 import { API } from './api';
+import { ErrorService } from './service';
 import { gcciLogin } from './directives/gcci-login';
 import { gcciMessage } from './directives/gcci-message';
 import { MainCtrl, HomeCtrl } from './controllers/main';
@@ -14,7 +15,19 @@ app.constant("fbUrl", "https://gcci-cell-survey.firebaseio.com");
 app.run(["$rootScope",
     ($rootScope) => {
         // global directives
-        $rootScope.gcciMessage = { "toggle": false };
+        $rootScope.gcciMessage = class {
+            static alert(type, title, body, callback) {
+                this.type = type;
+                this.title = title;
+                this.body = body;
+                this.callback = callback;
+                this.toggle = true;
+            }
+
+            static hide() {
+                this.toggle = false;
+            }
+        };
 
         // global user data
         $rootScope.user = null;
@@ -48,6 +61,7 @@ app.run(["$rootScope",
 app
     .config(router)
     .service("api", API)
+    .service("errorService", ErrorService)
     .directive("gcciLogin", gcciLogin)
     .directive("gcciMessage", gcciMessage)
     .controller("MainCtrl", MainCtrl)
