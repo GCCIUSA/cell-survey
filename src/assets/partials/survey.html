@@ -1,37 +1,41 @@
-<div class="alert alert-info">
-    You have submitted your survey. Thank you for your participation.
+<div ng-cloak>
+    <div class="alert alert-info" ng-if="survey.submitted">
+        You have submitted your survey. Thank you for your participation.
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th width="60">序號</th>
+            <th>評估項目\分數</th>
+            <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}分</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- categories -->
+        <tr ng-repeat-start="category in ::survey.survey.form">
+            <td colspan="8" class="category" align="left">
+                {{::category.title}} {{survey.categoryTotal}}
+            </td>
+        </tr>
+        <!-- items -->
+        <tr ng-repeat="item in ::category.items">
+            <td>
+                {{::$parent.$index * category.items.length + $index + 1}}
+                <i class="fa fa-check text-muted" ng-if="survey.isItemSelected($parent.$index, $index)"></i>
+            </td>
+            <td>{{::item.item}}</td>
+            <!-- options -->
+            <td ng-repeat="option in ::item.options track by $index">
+                <a href="" ng-click="survey.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
+                <i class="fa fa-check text-success" ng-if="survey.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
+            </td>
+        </tr>
+        <tr ng-repeat-end></tr>
+        </tbody>
+    </table>
+    <div class="alert alert-success">
+        <div class="pull-right">總分數 {{survey.totalScore}}</div>
+        <div class="clearfix"></div>
+    </div>
+    <button class="btn btn-primary pull-right" ng-click="survey.submitSurvey()" ng-if="!survey.submitted">Submit Survey</button>
 </div>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th width="60">序號</th>
-        <th>評估項目\分數</th>
-        <th ng-repeat="score in [0,1,2,3,4]" width="130">{{::score}}分</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- categories -->
-    <tr ng-repeat-start="category in ::survey.surveyForm">
-        <td colspan="8" class="category" align="left">{{::category.title}}</td>
-    </tr>
-    <!-- items -->
-    <tr ng-repeat="item in ::category.items">
-        <td>
-            {{::$parent.$index * category.items.length + $index + 1}}
-            <i class="fa fa-check text-muted" ng-if="survey.isItemSelected($parent.$index, $index)"></i>
-        </td>
-        <td>{{::item.item}}</td>
-        <!-- options -->
-        <td ng-repeat="option in ::item.options track by $index">
-            <a href="" ng-click="survey.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
-            <i class="fa fa-check text-success" ng-if="survey.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
-        </td>
-    </tr>
-    <tr ng-repeat-end></tr>
-    </tbody>
-</table>
-<div class="alert alert-success">
-    <div class="pull-right">總分數 {{survey.totalScore}}</div>
-    <div class="clearfix"></div>
-</div>
-<button class="btn btn-primary pull-right" ng-click="survey.submitSurvey()" ng-if="!survey.submitted">Submit Survey</button>

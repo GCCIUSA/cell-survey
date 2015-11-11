@@ -1,7 +1,8 @@
 export class API {
-    constructor(fbUrl, $firebaseArray, $firebaseAuth, $state, $q) {
+    constructor(fbUrl, $firebaseArray, $firebaseAuth, $state, $q, $http) {
         this.$state = $state;
         this.$q = $q;
+        this.$http = $http;
 
         this.ref = new Firebase(fbUrl);
         this.fbArray = $firebaseArray(this.ref);
@@ -42,7 +43,7 @@ export class API {
      */
     getSurveyByUser(uid) {
         let deferred = this.$q.defer();
-        this.ref.orderByChild("uid").equalTo(uid).on("value", (snapshot) => {
+        this.ref.orderByChild("uid").equalTo(uid).once("value", (snapshot) => {
             deferred.resolve(snapshot.val());
 
             // cancel event callback
@@ -65,6 +66,33 @@ export class API {
             console.log("record added: " + id);
         });
     }
+
+    getCurrentForm() {
+        let deferred = this.$q.defer();
+
+        let surveyConfig = this.$http.get("survey.json"),
+            surveyForms = this.$http.get("forms.json");
+
+        this.$q.all([surveyConfig, surveyForms]).then((response) => {
+            let currentSurvey = response[0].data[0],
+                today = new Date().getTime(),
+                openFrom = new Date(currentSurvey.openPeriod[0]).getTime(),
+                openUntil = new Date(currentSurvey.openPeriod[1]).getTime();
+
+            if (today >= openFrom && today <= openUntil) {
+                let data = response[1].data.find(form => form.ver === currentSurvey.formVer);
+                data.statsPeriod = currentSurvey.statsPeriod;
+                data.openPeriod = currentSurvey.openPeriod;
+
+                deferred.resolve(data);
+            }
+            else {
+                deferred.reject();
+            }
+        });
+
+        return deferred.promise;
+    }
 }
 
-API.$inject = ["fbUrl", "$firebaseArray", "$firebaseAuth", "$state", "$q"];
+API.$inject = ["fbUrl", "$firebaseArray", "$firebaseAuth", "$state", "$q", "$http"];

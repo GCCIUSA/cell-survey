@@ -19,15 +19,20 @@ export class SurveyCtrl {
     }
 
     init() {
-        this.api.getSurveyByUser(this.$rootScope.user.uid).then((data) => {
-            this.getSurveyForm();
+        this.api.getCurrentForm()
+            .then((survey) => {
+                this.survey = survey;
+            })
+            .catch(() => {
+                this.survey = null;
+            });
 
+        this.api.getSurveyByUser(this.$rootScope.user.uid).then((data) => {
             if (data === null) {
                 this.submitted = false;
             }
             else {
-                let surveyKeys = Object.keys(data);
-                this.answers = data[surveyKeys[0]].answers;
+                this.answers = data[data].answers;
                 this.getTotalScore();
             }
         });
@@ -37,7 +42,15 @@ export class SurveyCtrl {
      * get survey data
      */
     getSurveyForm() {
-        this.$http.get("survey.json").then(
+        this.api.getCurrentForm()
+            .then((survey) => {
+                this.survey = survey;
+            })
+            .catch(() => {
+                this.survey = null;
+            });
+
+        /* this.$http.get("survey.json").then(
             (response) => {
                 this.surveyForm = response.data;
 
@@ -47,7 +60,7 @@ export class SurveyCtrl {
                     this.totalItemCnt += category.items.length;
                 }
             }
-        );
+        ); */
     }
 
     /**
