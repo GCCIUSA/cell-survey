@@ -2,7 +2,6 @@ var gulp = require("gulp"),
     plugins = require("gulp-load-plugins")(),
     streamqueue = require("streamqueue"),
     browserify = require("browserify"),
-    babelify = require("babelify"),
     source = require("vinyl-source-stream"),
     buffer = require("vinyl-buffer");
 
@@ -24,8 +23,8 @@ var jsSrc = function (isRelease) {
         assetPath + "/libs/firebase/angularfire.min.js"
     ]);
 
-    var custom = browserify(assetPath + "/js/config.js")
-        .transform(babelify)
+    var custom = browserify([require.resolve("babel-polyfill"), assetPath + "/js/config.js"])
+        .transform("babelify", { "presets": ["es2015"] })
         .bundle()
         .pipe(source("custom.js"))
         .pipe(buffer());
