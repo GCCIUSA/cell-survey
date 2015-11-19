@@ -1,66 +1,38 @@
 export class SurveyCtrl {
-    constructor($http, $rootScope, api) {
+    constructor($http, $rootScope, $q, utilService, $firebaseArray, stateAuth) {
         this.$http = $http;
         this.$rootScope = $rootScope;
-        this.api = api;
-
-        // total score
-        this.totalScore = 0;
-
-        // answers are string array in the format of i,j,k
-        // i - category index, j - item index, k - option index
-        // example: ["0,1,1", "0,2,1"]
-        this.answers = [];
-
-        // if the survey has been submitted.
-        this.submitted = true;
+        this.$q = $q;
+        this.utilService = utilService;
+        this.$firebaseArray = $firebaseArray;
+        this.stateAuth = stateAuth;
 
         this.init();
     }
 
     init() {
-        this.api.getCurrentForm()
-            .then((survey) => {
-                this.survey = survey;
-            })
-            .catch(() => {
-                this.survey = null;
-            });
+        let surveyConfig = this.$http.get("survey.json"),
+            surveyForms = this.$http.get("forms.json");
 
-        this.api.getSurveyByUser(this.$rootScope.user.uid).then((data) => {
-            if (data === null) {
-                this.submitted = false;
-            }
-            else {
-                this.answers = data[data].answers;
-                this.getTotalScore();
+        this.$q.all([surveyConfig, surveyForms]).then((response) => {
+            this.currentSurvey = response[0].data[0];
+
+            let today = new Date().getTime(),
+                openFrom = new Date(this.currentSurvey.openPeriod[0]).getTime(),
+                openUntil = new Date(this.currentSurvey.openPeriod[1]).getTime();
+
+            if (today >= openFrom && today <= openUntil) {
+                this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
+
+                this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
+                    // answers are string array in the format of i,j,k
+                    // i - category index, j - item index, k - option index
+                    // example: ["0,1,1", "0,2,1"]
+                    this.currentSurvey.answers = this.utilService.arrayFromSnapshotVal(snapshot.val()).find(ans => ans.surveyId === this.currentSurvey.id);
+                    this.getTotalScore();
+                });
             }
         });
-    }
-
-    /**
-     * get survey data
-     */
-    getSurveyForm() {
-        this.api.getCurrentForm()
-            .then((survey) => {
-                this.survey = survey;
-            })
-            .catch(() => {
-                this.survey = null;
-            });
-
-        /* this.$http.get("survey.json").then(
-            (response) => {
-                this.surveyForm = response.data;
-
-                // count total items
-                this.totalItemCnt = 0;
-                for (let category of this.surveyForm) {
-                    this.totalItemCnt += category.items.length;
-                }
-            }
-        ); */
     }
 
     /**
@@ -72,25 +44,25 @@ export class SurveyCtrl {
         }
         let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
 
-        let answerIndex = this.answers.indexOf(answer);
+        let answerIndex = this.currentSurvey.answers.indexOf(answer);
         // uncheck answer if already checked
         if (answerIndex >= 0) {
-            this.answers.splice(answerIndex, 1);
+            this.currentSurvey.answers.splice(answerIndex, 1);
         }
         else {
             // select different option
             let itemFound = false;
-            for (let i = 0; i < this.answers.length; i++) {
-                let answerSplit = this.answers[i].split(",");
+            for (let i = 0; i < this.currentSurvey.answers.length; i++) {
+                let answerSplit = this.currentSurvey.answers[i].split(",");
                 if (categoryIndex === parseInt(answerSplit[0]) && itemIndex === parseInt(answerSplit[1])) {
-                    this.answers[i] = answer;
+                    this.currentSurvey.answers[i] = answer;
                     itemFound = true;
                     break;
                 }
             }
             // add new answer
             if (!itemFound) {
-                this.answers.push(answer);
+                this.currentSurvey.answers.push(answer);
             }
         }
 
@@ -102,14 +74,14 @@ export class SurveyCtrl {
      */
     isSelectedAnswer(categoryIndex, itemIndex, optionIndex) {
         let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
-        return this.answers.indexOf(answer) >= 0;
+        return this.currentSurvey.answers.indexOf(answer) >= 0;
     }
 
     /**
      * determines if an item has answer selected
      */
     isItemSelected(categoryIndex, itemIndex) {
-        return this.answers.find(x => x.indexOf(`${categoryIndex},${itemIndex},`) >= 0);
+        return this.currentSurvey.answers.find(x => x.indexOf(`${categoryIndex},${itemIndex},`) >= 0);
     }
 
     /**
@@ -117,7 +89,7 @@ export class SurveyCtrl {
      */
     getTotalScore() {
         let totalScore = 0;
-        for (let answer of this.answers) {
+        for (let answer of this.currentSurvey.answers) {
             totalScore += parseInt(answer.split(",")[2]);
         }
         this.totalScore = totalScore;
@@ -127,10 +99,14 @@ export class SurveyCtrl {
      * submit the survey
      */
     submitSurvey() {
-        // validate survey form before submitting
-        //if (this.validateSurveyForm()) {
-            this.api.submitSurvey(this.$rootScope.user.uid, this.answers);
-        //}
+        if (this.validateSurveyForm()) {
+            this.$firebaseArray(this.$rootScope.fbRef).$add({
+                "uid": this.$rootScope.user.uid,
+                "date": new Date().getTime(),
+                "surveyId": this.currentSurvey.id,
+                "answers": this.currentSurvey.answers
+            });
+        }
     }
 
     /**
@@ -138,7 +114,7 @@ export class SurveyCtrl {
      */
     validateSurveyForm() {
         // check total item count
-        if (this.answers.length !== this.totalItemCnt) {
+        if (this.currentSurvey.answers.length !== this.totalItemCnt) {
             this.$rootScope.gcciMessage.alert(
                 "danger",
                 "Incomplete Survey",
@@ -150,4 +126,4 @@ export class SurveyCtrl {
     }
 }
 
-SurveyCtrl.$inject = ["$http", "$rootScope", "api"];
+SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray", "stateAuth"];

@@ -1,7 +1,7 @@
 export class MainCtrl {
-    constructor($state, api, $rootScope) {
+    constructor($state, authService, $rootScope) {
         this.$state = $state;
-        this.api = api;
+        this.authService = authService;
         this.$rootScope = $rootScope;
 
         this.init();
@@ -28,12 +28,12 @@ export class MainCtrl {
     }
 
     logout() {
-        this.api.logout();
+        this.authService.logout();
         this.$state.go("home");
     }
 }
 
-MainCtrl.$inject = ["$state", "api", "$rootScope"];
+MainCtrl.$inject = ["$state", "authService", "$rootScope"];
 
 export class HomeCtrl {
     constructor() {

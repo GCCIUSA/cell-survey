@@ -1,6 +1,5 @@
 import { router } from './router';
-import { API } from './api';
-import { ErrorService } from './service';
+import { ErrorService, UtilService, AuthService } from './service';
 import { gcciLogin } from './directives/gcci-login';
 import { gcciMessage } from './directives/gcci-message';
 import { MainCtrl, HomeCtrl } from './controllers/main';
@@ -9,8 +8,6 @@ import { ReportCtrl } from './controllers/report';
 
 
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
-
-app.constant("fbUrl", "https://gcci-cell-survey.firebaseio.com");
 
 app.run(["$rootScope",
     ($rootScope) => {
@@ -29,27 +26,25 @@ app.run(["$rootScope",
             }
         };
 
+        // firebase root reference
+        $rootScope.fbRef = new Firebase("https://gcci-cell-survey.firebaseio.com");
+
         // global user data
         $rootScope.user = null;
 
         // get authentication state
-        $rootScope.$on("$stateChangeStart", (evt, toState, toParams) => {
+        $rootScope.$on("$stateChangeStart", (evt, toState) => {
             // add auth check in state's resolve
             if (toState.resolve !== void 0 && !toState.resolve.hasOwnProperty("stateAuth")) {
-                toState.resolve.stateAuth = ["api", "$q", (api, $q) => {
+                toState.resolve.stateAuth = ["authService", "$q", (authService, $q) => {
                     let deferred = $q.defer();
 
-                    let authData = api.getAuth();
-                    if (authData) {
-                        // auth good
-                        $rootScope.user = authData;
+                    authService.getAuth().then(() => {
                         deferred.resolve();
-                    }
-                    else {
-                        // auth bad
+                    }, () => {
                         deferred.reject();
-                        api.login(toState, toParams);
-                    }
+                        authService.login();
+                    });
 
                     return deferred.promise;
                 }];
@@ -60,10 +55,13 @@ app.run(["$rootScope",
 
 app
     .config(router)
-    .service("api", API)
     .service("errorService", ErrorService)
+    .service("utilService", UtilService)
+    .service("authService", AuthService)
+
     .directive("gcciLogin", gcciLogin)
     .directive("gcciMessage", gcciMessage)
+
     .controller("MainCtrl", MainCtrl)
     .controller("HomeCtrl", HomeCtrl)
     .controller("SurveyCtrl", SurveyCtrl)

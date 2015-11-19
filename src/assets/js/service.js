@@ -7,3 +7,105 @@ export class ErrorService {
 
     }
 }
+
+
+export class AuthService {
+    constructor($rootScope, $firebaseAuth, $q, $http) {
+        this.$rootScope = $rootScope;
+        this.$q = $q;
+        this.$http = $http;
+
+        this.fbAuth = $firebaseAuth(this.$rootScope.fbRef);
+    }
+
+    getAuth() {
+        /**
+         * need to check both firebase token and google token.
+         * firebase token is for firebase services, google token is for google api service.
+         *
+         * firebase token is set to expired in 24 hours, google access token is set to expired in 1 hour,
+         * will need to use google refresh token to refresh google access token.
+         *
+         * unfortunately, as of now, there's no way for firebase to obtain a google refresh token, will have to
+         * re-authenticate user when google access token has expired.
+         */
+
+        let deferred = this.$q.defer();
+
+        // check if firebase token is valid
+        this.authInProgress = true;
+        this.fbAuth.$onAuth((authData) => {
+            if (authData) { // firebase token is valid
+                // check if google token is valid
+                let url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${authData.google.accessToken}`;
+                this.$http.get(url).then(
+                    () => { // google token is valid
+                        this.authInProgress = false;
+                        this.$rootScope.user = authData;
+                        deferred.resolve();
+                    },
+                    (error) => { // google token is invalid
+                        this.authInProgress = false;
+                        if (error.data.error === "invalid_token") {
+                            this.$rootScope.gcciMessage.alert(
+                                "danger",
+                                "Authentication Timeout",
+                                "Authentication timed out, please login again."
+                            );
+                        }
+                        deferred.reject(error);
+                    }
+                );
+            }
+            else { // firebase token is invalid
+                this.authInProgress = false;
+                deferred.reject();
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    login() {
+        let options = {
+            "scope": [
+                "https://www.googleapis.com/auth/userinfo.email",
+                "https://www.googleapis.com/auth/admin.directory.user.readonly"
+            ].join(" ")
+        };
+
+        this.fbAuth.$authWithOAuthRedirect("google", options).catch(() => {
+            this.$rootScope.gcciMessage.alert(
+                "danger",
+                "Authentication Error",
+                "Authentication failed, please try again."
+            );
+        });
+    }
+
+    logout() {
+        return this.fbAuth.$unauth();
+    }
+}
+
+AuthService.$inject = ["$rootScope", "$firebaseAuth", "$q", "$http"];
+
+
+export class UtilService {
+    constructor() {
+
+    }
+
+    arrayFromSnapshotVal(val) {
+        let arr = [];
+
+        if (val !== null) {
+            for (let key of Object.keys(val)) {
+                arr.push(val[key]);
+            }
+        }
+
+        return arr;
+    }
+
+}
