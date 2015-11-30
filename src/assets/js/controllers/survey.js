@@ -11,26 +11,33 @@ export class SurveyCtrl {
     }
 
     init() {
+        this.isSubmitted = false;
+        this.isOpen = false;
+
         let surveyConfig = this.$http.get("survey.json"),
             surveyForms = this.$http.get("forms.json");
 
         this.$q.all([surveyConfig, surveyForms]).then((response) => {
             this.currentSurvey = response[0].data[0];
+            this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
+            this.currentSurvey.answers = [];
+
+            this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
+                // answers are string array in the format of i,j,k
+                // i - category index, j - item index, k - option index
+                // example: ["0,1,1", "0,2,1"]
+                if (snapshot.val() !== null) {
+                    this.currentSurvey.answers = this.utilService.arrayFromSnapshotVal(snapshot.val()).find(ans => ans.surveyId === this.currentSurvey.id);
+                    this.isSubmitted = true;
+                }
+            });
 
             let today = new Date().getTime(),
                 openFrom = new Date(this.currentSurvey.openPeriod[0]).getTime(),
                 openUntil = new Date(this.currentSurvey.openPeriod[1]).getTime();
 
             if (today >= openFrom && today <= openUntil) {
-                this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
-
-                this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
-                    // answers are string array in the format of i,j,k
-                    // i - category index, j - item index, k - option index
-                    // example: ["0,1,1", "0,2,1"]
-                    this.currentSurvey.answers = this.utilService.arrayFromSnapshotVal(snapshot.val()).find(ans => ans.surveyId === this.currentSurvey.id);
-                    this.getTotalScore();
-                });
+                this.isOpen = true;
             }
         });
     }
@@ -39,7 +46,7 @@ export class SurveyCtrl {
      * selects(check/uncheck) an item
      */
     select(categoryIndex, itemIndex, optionIndex) {
-        if (this.submitted) {
+        if (this.isSubmitted) {
             return;
         }
         let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
@@ -73,15 +80,9 @@ export class SurveyCtrl {
      * determines if an answer is selected
      */
     isSelectedAnswer(categoryIndex, itemIndex, optionIndex) {
-        let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
-        return this.currentSurvey.answers.indexOf(answer) >= 0;
-    }
-
-    /**
-     * determines if an item has answer selected
-     */
-    isItemSelected(categoryIndex, itemIndex) {
-        return this.currentSurvey.answers.find(x => x.indexOf(`${categoryIndex},${itemIndex},`) >= 0);
+        if (this.currentSurvey) {
+            return this.currentSurvey.answers.indexOf(`${categoryIndex},${itemIndex},${optionIndex}`) >= 0;
+        }
     }
 
     /**
@@ -114,7 +115,11 @@ export class SurveyCtrl {
      */
     validateSurveyForm() {
         // check total item count
-        if (this.currentSurvey.answers.length !== this.totalItemCnt) {
+        let totalItemCnt = 0;
+        for (let cat of this.currentSurvey.form) {
+            totalItemCnt += cat.items.length;
+        }
+        if (this.currentSurvey.answers.length !== totalItemCnt) {
             this.$rootScope.gcciMessage.alert(
                 "danger",
                 "Incomplete Survey",
