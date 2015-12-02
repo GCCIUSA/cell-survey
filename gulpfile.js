@@ -91,7 +91,7 @@ gulp.task("watch", ["compile"], function () {
     };
 
     plugins.livereload.listen();
-    gulp.watch(assetPath + "/css/**/*.css", ["css"]).on("change", reload);
+    gulp.watch(assetPath + "/less/**/*.less", ["css"]).on("change", reload);
     gulp.watch(assetPath + "/js/**/*.js", ["js-dev"]).on("change", reload);
     gulp.watch(["src/**/*.html"]).on("change", reload);
 });

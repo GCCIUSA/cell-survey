@@ -11,34 +11,38 @@ export class SurveyCtrl {
     }
 
     init() {
-        this.isSubmitted = false;
-        this.isOpen = false;
-
         let surveyConfig = this.$http.get("survey.json"),
             surveyForms = this.$http.get("forms.json");
 
         this.$q.all([surveyConfig, surveyForms]).then((response) => {
             this.currentSurvey = response[0].data[0];
             this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
-            this.currentSurvey.answers = [];
 
             this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
                 // answers are string array in the format of i,j,k
                 // i - category index, j - item index, k - option index
                 // example: ["0,1,1", "0,2,1"]
-                if (snapshot.val() !== null) {
-                    this.currentSurvey.answers = this.utilService.arrayFromSnapshotVal(snapshot.val()).find(ans => ans.surveyId === this.currentSurvey.id);
-                    this.isSubmitted = true;
-                }
+                this.$rootScope.$apply(() => {
+                    if (snapshot.val() !== null) {
+                        let answerObj = this.utilService.arrayFromSnapshotVal(snapshot.val()).find(ans => ans.surveyId === this.currentSurvey.id);
+                        if (answerObj) {
+                            this.currentSurvey.isSubmitted = true;
+                            this.currentSurvey.answers = answerObj.answers;
+                        }
+                    }
+                    if (this.currentSurvey.isSubmitted === undefined) {
+                        this.currentSurvey.isSubmitted = false;
+                        this.currentSurvey.answers = [];
+                    }
+                    this.getTotalScore();
+                });
             });
 
             let today = new Date().getTime(),
-                openFrom = new Date(this.currentSurvey.openPeriod[0]).getTime(),
-                openUntil = new Date(this.currentSurvey.openPeriod[1]).getTime();
+                openFrom = this.utilService.setLocaleDate(this.currentSurvey.openPeriod[0]).getTime(),
+                openUntil = this.utilService.setLocaleDate(this.currentSurvey.openPeriod[1], true).getTime();
 
-            if (today >= openFrom && today <= openUntil) {
-                this.isOpen = true;
-            }
+            this.currentSurvey.isOpen = today >= openFrom && today <= openUntil;
         });
     }
 
@@ -46,7 +50,7 @@ export class SurveyCtrl {
      * selects(check/uncheck) an item
      */
     select(categoryIndex, itemIndex, optionIndex) {
-        if (this.isSubmitted) {
+        if (this.currentSurvey.isSubmitted || !this.currentSurvey.isOpen) {
             return;
         }
         let answer = `${categoryIndex},${itemIndex},${optionIndex}`;
@@ -72,15 +76,14 @@ export class SurveyCtrl {
                 this.currentSurvey.answers.push(answer);
             }
         }
-
         this.getTotalScore();
     }
 
     /**
-     * determines if an answer is selected
+     * determines if an item is selected
      */
     isSelectedAnswer(categoryIndex, itemIndex, optionIndex) {
-        if (this.currentSurvey) {
+        if (this.currentSurvey && this.currentSurvey.hasOwnProperty("answers")) {
             return this.currentSurvey.answers.indexOf(`${categoryIndex},${itemIndex},${optionIndex}`) >= 0;
         }
     }
@@ -93,7 +96,7 @@ export class SurveyCtrl {
         for (let answer of this.currentSurvey.answers) {
             totalScore += parseInt(answer.split(",")[2]);
         }
-        this.totalScore = totalScore;
+        this.totalScore = totalScore === 0 ? "N/A" : totalScore;
     }
 
     /**
@@ -106,6 +109,8 @@ export class SurveyCtrl {
                 "date": new Date().getTime(),
                 "surveyId": this.currentSurvey.id,
                 "answers": this.currentSurvey.answers
+            }).then(() => {
+                window.location.reload();
             });
         }
     }

@@ -1,8 +1,17 @@
 <div ng-cloak>
-    <div class="alert alert-info" ng-if="survey.isSubmitted">
-        You have submitted your survey. Thank you for your participation.
+    <div class="alert alert-info" ng-if="vm.currentSurvey.isSubmitted === true">
+        You have submitted the vm. Thank you for your participation.
     </div>
-    <div ng-if="survey.isOpen">
+    <div class="alert alert-danger" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === false">
+        There's no survey open for submission at this time.
+    </div>
+    <div ng-if="vm.currentSurvey">
+        <blockquote class="pull-right survey-period">
+            Survey Period: <b>{{vm.utilService.displayDate(vm.currentSurvey.statsPeriod[0])}}
+            -
+            {{vm.utilService.displayDate(vm.currentSurvey.statsPeriod[1])}}</b>
+            <p class="sub-text">Submission Deadline: {{vm.utilService.displayDate(vm.currentSurvey.openPeriod[1])}}</p>
+        </blockquote>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -13,9 +22,9 @@
             </thead>
             <tbody>
             <!-- categories -->
-            <tr ng-repeat-start="category in ::survey.currentSurvey.form">
+            <tr ng-repeat-start="category in ::vm.currentSurvey.form">
                 <td colspan="8" class="category" align="left">
-                    {{::category.title}} {{survey.categoryTotal}}
+                    {{::category.title}} {{vm.categoryTotal}}
                 </td>
             </tr>
             <!-- items -->
@@ -26,17 +35,17 @@
                 <td>{{::item.item}}</td>
                 <!-- options -->
                 <td ng-repeat="option in ::item.options track by $index">
-                    <a href="" ng-click="survey.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
-                    <i class="fa fa-check text-success" ng-if="survey.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
+                    <a href="" ng-click="vm.select($parent.$parent.$index, $parent.$index, $index)">{{::option}}</a>
+                    <i class="fa fa-check text-success" ng-if="vm.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
                 </td>
             </tr>
             <tr ng-repeat-end></tr>
             </tbody>
         </table>
         <div class="alert alert-success">
-            <div class="pull-right">總分數 {{survey.totalScore}}</div>
+            <div class="pull-right">總分數 {{vm.totalScore}}</div>
             <div class="clearfix"></div>
         </div>
-        <button class="btn btn-primary pull-right" ng-click="survey.submitSurvey()" ng-if="!survey.submitted">Submit Survey</button>
+        <button class="btn btn-primary pull-right" ng-click="vm.submitSurvey()" ng-if="!vm.submitted">Submit Survey</button>
     </div>
 </div>

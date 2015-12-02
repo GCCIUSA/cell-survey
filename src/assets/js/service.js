@@ -108,4 +108,30 @@ export class UtilService {
         return arr;
     }
 
+    displayDate(val) {
+        let d = this.setLocaleDate(val);
+        return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+    }
+
+    setLocaleDate(val, isEnd = false) {
+        let d = new Date(),
+            dp = val.split("-");
+
+        d.setFullYear(dp[0]);
+        d.setMonth(parseInt(dp[1]) - 1);
+        d.setDate(dp[2]);
+
+        if (isEnd) {
+            d.setHours(23);
+            d.setMinutes(59);
+            d.setSeconds(59);
+        }
+        else {
+            d.setHours(0);
+            d.setMinutes(0);
+            d.setSeconds(0);
+        }
+
+        return d;
+    }
 }

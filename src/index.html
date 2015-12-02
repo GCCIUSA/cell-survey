@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="assets/gen/css/app.min.css"/>
     <script type="text/javascript" src="assets/gen/js/app.js"></script>
 </head>
-<body ng-controller="MainCtrl as main" ng-cloak>
+<body ng-controller="MainCtrl as vm" ng-cloak>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -23,17 +23,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-repeat="navItem in ::main.navItems" ng-class="{'active': main.isActiveNav(navItem.state)}">
+                <li ng-repeat="navItem in ::vm.navItems" ng-class="{'active': vm.isActiveNav(navItem.state)}">
                     <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-switch on="main.isLoggedIn()">
+            <ul class="nav navbar-nav navbar-right" ng-switch on="vm.isLoggedIn()">
                 <li class="dropdown" ng-switch-when="true">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        {{main.getUserDisplayName()}}
+                        {{vm.getUserDisplayName()}}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="" ng-click="main.logout()">Log Out</a></li>
+                        <li><a href="" ng-click="vm.logout()">Log Out</a></li>
                     </ul>
                 </li>
             </ul>
