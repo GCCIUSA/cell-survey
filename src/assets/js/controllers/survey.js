@@ -106,6 +106,8 @@ export class SurveyCtrl {
         if (this.validateSurveyForm()) {
             this.$firebaseArray(this.$rootScope.fbRef).$add({
                 "uid": this.$rootScope.user.uid,
+                "displayName": this.$rootScope.user.google.displayName,
+                "email": this.$rootScope.user.google.email,
                 "date": new Date().getTime(),
                 "surveyId": this.currentSurvey.id,
                 "answers": this.currentSurvey.answers

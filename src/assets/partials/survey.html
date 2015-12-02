@@ -46,6 +46,6 @@
             <div class="pull-right">總分數 {{vm.totalScore}}</div>
             <div class="clearfix"></div>
         </div>
-        <button class="btn btn-primary pull-right" ng-click="vm.submitSurvey()" ng-if="!vm.submitted">Submit Survey</button>
+        <button class="btn btn-primary pull-right" ng-click="vm.submitSurvey()" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === true">Submit Survey</button>
     </div>
 </div>
