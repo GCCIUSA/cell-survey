@@ -16,10 +16,6 @@
 1. run `node server` to start local server
 2. launch browser and access the site `http://localhost:8080`
 
-## Deployment
-1. run `firebase deploy`
-2. Launch browser and access the site `https://gcci-cell-survey.firebaseapp.com`
-
 ## Terminology
 - Survey Form - a form for user to fill out
 - Survey Answers - data that represents selected items on the survey form
