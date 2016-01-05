@@ -108,6 +108,10 @@ export class UtilService {
         return arr;
     }
 
+    getAttr(obj, attr, defaultVal = undefined) {
+      return obj.hasOwnProperty(attr) ? obj[attr] : defaultVal;
+    }
+
     displayDate(val) {
         let d = this.setLocaleDate(val);
         return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;

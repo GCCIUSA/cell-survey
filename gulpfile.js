@@ -20,6 +20,8 @@ var jsSrc = function (isRelease) {
         assetPath + "/libs/angular/angular-sanitize.min.js",
         assetPath + "/libs/angular/angular-ui-router.min.js",
         assetPath + "/libs/firebase/firebase.js",
+        assetPath + "/libs/flot/jquery.flot.min.js",
+        assetPath + "/libs/flot/jquery.flot.categories.min.js",
         assetPath + "/libs/firebase/angularfire.min.js"
     ]);
 

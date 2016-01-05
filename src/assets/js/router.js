@@ -23,7 +23,8 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
         .state("report", {
             "url": "/report",
             "templateUrl": url("report"),
-            "controller": "ReportCtrl as vm"
+            "controller": "ReportCtrl as vm",
+            "resolve": {}
         })
     ;
 }

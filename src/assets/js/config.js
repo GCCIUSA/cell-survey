@@ -5,6 +5,7 @@ import { gcciMessage } from './directives/gcci-message';
 import { MainCtrl, HomeCtrl } from './controllers/main';
 import { SurveyCtrl } from './controllers/survey';
 import { ReportCtrl } from './controllers/report';
+import { API } from '../libs/model-api/api';
 
 
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
@@ -35,7 +36,7 @@ app.run(["$rootScope",
         // get authentication state
         $rootScope.$on("$stateChangeStart", (evt, toState) => {
             // add auth check in state's resolve
-            if (toState.resolve !== void 0 && !toState.resolve.hasOwnProperty("stateAuth")) {
+            if (toState.resolve !== undefined && !toState.resolve.hasOwnProperty("stateAuth")) {
                 toState.resolve.stateAuth = ["authService", "$q", (authService, $q) => {
                     let deferred = $q.defer();
 
@@ -50,6 +51,9 @@ app.run(["$rootScope",
                 }];
             }
         });
+
+        // GCCI Model API
+        $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
     }
 ]);
 
