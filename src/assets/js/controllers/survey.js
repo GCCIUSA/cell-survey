@@ -14,10 +14,9 @@ export class SurveyCtrl {
         let surveyConfig = this.$http.get("survey.json"),
             surveyForms = this.$http.get("forms.json");
 
-        this.$q.all([surveyConfig, surveyForms]).then((response) => {
+        this.$q.all([surveyConfig, surveyForms]).then(response => {
             this.currentSurvey = response[0].data[response[0].data.length - 1];
             this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
-            console.log(this.currentSurvey);
 
             this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
                 // answers are string array in the format of i,j,k

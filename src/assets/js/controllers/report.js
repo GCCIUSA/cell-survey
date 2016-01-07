@@ -28,40 +28,58 @@ export class ReportCtrl {
               tmpReportData = tmpReportData.concat(surveyData.filter(survey => this.utilService.getAttr(descendant, "leaders", "").indexOf(survey.uid) >= 0));
             }
             this.reportData = tmpReportData;
-            console.log(this.reportData);
 
             // calculate total scores for each survey
             for (let survey of this.reportData) {
               survey.totalScore = this.getTotalScore(survey.answers);
             }
 
-            // score chart
-            let scoreChartData = [];
-            for (let survey of this.reportData) {
-              scoreChartData.push([survey.displayName + survey.surveyId, survey.totalScore]);
-            }
-            console.log(scoreChartData);
-            $.plot("#scoreChart", [scoreChartData], {
-                "series": {
-                  "bars": {
-                    "show": true,
-                    "align": "center",
-                    "barWidth": 0.8
-                  }
-                },
-                "xaxis": {
-                  "mode": "categories",
-                },
-                "yaxis": {
-                  "max": 100
-                }
-              }
-            );
-
             // get survey config and forms
             this.$q.all([surveyConfig, surveyForms]).then(response => {
               this.currentSurvey = response[0].data[response[0].data.length - 1];
               this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
+
+              // score chart
+              let scoreChartData = [];
+              for (let survey of this.reportData) {
+                scoreChartData.push([survey.displayName + survey.surveyId, survey.totalScore]);
+              }
+
+              $.plot("#scoreChart", [scoreChartData], {
+                  "series": {
+                    "bars": {
+                      "show": true,
+                      "align": "center",
+                      "barWidth": 0.8
+                    }
+                  },
+                  "xaxis": {
+                    "mode": "categories",
+                  },
+                  "yaxis": {
+                    "max": 100
+                  },
+                  "grid": {
+                    "hoverable": true,
+                    "clickable": true
+                  }
+                }
+              );
+
+              $("#scoreChart").bind("plothover", (event, pos, item) => {
+                if (item) {
+        					let score = item.datapoint[1];
+        					$("#tooltip").html(score)
+        						.css({top: item.pageY + 5, left: item.pageX - 25})
+        						.fadeIn(200);
+        				}
+                else {
+        					$("#tooltip").hide();
+        				}
+              });
+              $("#scoreChart").bind("plotclick", (event, pos, item) => {
+                // TODO go to specific survey view
+              });
             });
           });
         });
