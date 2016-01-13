@@ -1,10 +1,68 @@
-<div id="qtrChart" style="height: 400px;"></div>
-<hr style="margin: 50px auto;"/>
-<div class="row">
-  <div class="col-md-6">
-    <div id="healthChart" style="width: 100%; height: 400px;"></div>
+<div id="reportCharts">
+  <div id="qtrChart" style="height: 400px;"></div>
+  <hr style="margin: 50px auto;"/>
+  <div class="row">
+    <div class="col-md-6">
+      <div id="healthChart" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="col-md-6">
+      <div id="healthChartPrevQtr" style="width: 100%; height: 400px;"></div>
+    </div>
   </div>
-  <div class="col-md-6">
-    <div id="healthChartPrevQtr" style="width: 100%; height: 400px;"></div>
+</div>
+{{vm.selectedSurvey}}dd
+<!-- report detail modal -->
+<div class="modal fade" id="reportDetailModal" tabindex="-1" role="dialog" aria-labelledby="Report Detail">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">
+          {{vm.selectedSurvey.displayName}}
+          {{vm.utilService.displayDate(vm.selectedSurveyConfig.statsPeriod[0])}}
+          -
+          {{vm.utilService.displayDate(vm.selectedSurveyConfig.statsPeriod[1])}}
+        </h4>
+      </div>
+      <div class="modal-body" style="overflow-y: auto;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th width="60">序號</th>
+                <th>評估項目\分數</th>
+                <th ng-repeat="score in [0,1,2,3,4]" width="120">{{score}}分</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- categories -->
+            <tr ng-repeat-start="category in vm.selectedSurveyForm">
+                <td colspan="8" class="category" align="left">
+                    {{category.title}} {{vm.categoryTotal}}
+                </td>
+            </tr>
+            <!-- items -->
+            <tr ng-repeat="item in category.items">
+                <td>
+                    {{$parent.$index * category.items.length + $index + 1}}
+                </td>
+                <td>{{item.item}}</td>
+                <!-- options -->
+                <td ng-repeat="option in item.options track by $index">
+                    {{option}}
+                    <i class="fa fa-check text-success" ng-if="vm.isSelectedAnswer($parent.$parent.$index, $parent.$index, $index)"></i>
+                </td>
+            </tr>
+            <tr ng-repeat-end></tr>
+            </tbody>
+        </table>
+        <div class="alert alert-success">
+            <div class="pull-right">總分數 {{vm.selectedSurvey.totalScore}}</div>
+            <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>

@@ -113,11 +113,14 @@ export class UtilService {
     }
 
     displayDate(val) {
+      if (val) {
         let d = this.setLocaleDate(val);
         return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+      }
     }
 
     setLocaleDate(val, isEnd = false) {
+      if (val) {
         let d = new Date(),
             dp = val.split("-");
 
@@ -137,5 +140,6 @@ export class UtilService {
         }
 
         return d;
+      }
     }
 }

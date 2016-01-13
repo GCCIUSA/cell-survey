@@ -49,7 +49,23 @@ export class ReportCtrl {
     }
 
     genQtrChart(numQtr) {
-      let scoreChartData = [], index = 0;
+      let chartData = [], index = 0;
+
+      let showDetail = (e) => {
+        this.$rootScope.$apply(() => {
+          this.selectedSurvey = e.dataPoint.survey;
+          this.selectedSurveyConfig = this.surveyConfig.find(cfg => cfg.id === this.selectedSurvey.surveyId);
+          this.selectedSurveyForm = this.surveyForms.find(form => form.ver === this.selectedSurveyConfig.formVer).form;
+        });
+        $(".modal-body").css("max-height", $(window).height() * 0.7);
+        $(".modal-dialog").css("width", $("#reportCharts").width() * 0.9);
+        $("#reportDetailModal")
+          .off("shown.bs.modal")
+          .on("shown.bs.modal", () => {
+            $(".modal-body").animate({ "scrollTop": 0});
+          })
+          .modal("show");
+      };
 
       for (let surveyVer of this.surveyConfig) {
         if (index >= this.surveyConfig.length - numQtr) {
@@ -60,14 +76,19 @@ export class ReportCtrl {
             "indexLabel": "{y}",
             "indexLabelPlacement": "outside",
             "indexLabelOrientation": "horizontal",
-            "dataPoints": []
+            "dataPoints": [],
+            "click": showDetail
           };
           for (let survey of this.reportData) {
             if (survey.surveyId === surveyVer.id) {
-              statsPeriodData.dataPoints.push({ "label": survey.displayName, "y": survey.totalScore});
+              statsPeriodData.dataPoints.push({
+                "label": survey.displayName,
+                "y": survey.totalScore,
+                "survey": survey
+              });
             }
           }
-          scoreChartData.push(statsPeriodData);
+          chartData.push(statsPeriodData);
         }
         index++;
       }
@@ -80,7 +101,7 @@ export class ReportCtrl {
           "minimum": 0,
           "maximum": 100
         },
-        "data": scoreChartData
+        "data": chartData
       });
     }
 
@@ -136,6 +157,10 @@ export class ReportCtrl {
         },
         "data": chartData
       })
+    }
+
+    isSelectedAnswer(categoryIndex, itemIndex, optionIndex) {
+      return this.selectedSurvey.answers.indexOf(`${categoryIndex},${itemIndex},${optionIndex}`) >= 0;
     }
 
     getTotalScore(answers) {
