@@ -18,7 +18,7 @@ export class ReportCtrl {
         this.$rootScope.api.getTree().then(tree => {
           // find current user's node with lowest depth (highest level)
           let currentUserNodes = tree.filter(node => this.utilService.getAttr(node, "leaders", "").indexOf(this.$rootScope.user.uid) >= 0);
-          let currentUserNode = currentUserNodes.sort((a, b) => a - b)[0];
+          let currentUserNode = currentUserNodes.sort((a, b) => a.depth - b.depth)[0];
 
           // find survey data for descendants of current user
           this.reportData = [];
@@ -40,6 +40,8 @@ export class ReportCtrl {
               this.surveyForms = response[1].data;
 
               this.genQtrChart(3);
+              this.genHealthChart();
+              this.genHealthChart(true);
             });
           });
         });
@@ -80,6 +82,60 @@ export class ReportCtrl {
         },
         "data": scoreChartData
       });
+    }
+
+    genHealthChart(isPrev) {
+      let chartData = [{
+        "type": "pie",
+        "indexLabel": "{label} {y}% ({count})",
+        "dataPoints": []
+      }];
+      let currentSurvey = this.surveyConfig[this.surveyConfig.length - (isPrev ? 2 : 1)];
+
+      let healthData = {
+        "Very Unhealthy": 0,
+        "Unhealthy": 0,
+        "Somewhat Healty": 0,
+        "Healty": 0,
+        "Very Healthy": 0
+      };
+      let totalSurveyCount = 0;
+      for (let survey of this.reportData) {
+        if (survey.surveyId === currentSurvey.id) {
+          //chartData[0].dataPoints.push({ "y": })
+          if (survey.totalScore > 80) {
+            healthData["Very Healthy"]++;
+          }
+          else if (survey.totalScore > 60) {
+            healthData["Healty"]++;
+          }
+          else if (survey.totalScore > 40) {
+            healthData["Somewhat Healty"]++;
+          }
+          else if (survey.totalScore > 20) {
+            healthData["Unhealty"]++;
+          }
+          else {
+            healthData["Very Unhealthy"]++;
+          }
+          totalSurveyCount++;
+        }
+      }
+
+      for (let healthStatus of Object.keys(healthData)) {
+        chartData[0].dataPoints.push({
+          "y": healthData[healthStatus] / totalSurveyCount * 100,
+          "label": healthStatus,
+          "count": healthData[healthStatus]
+        })
+      }
+
+      $(isPrev ? "#healthChartPrevQtr" : "#healthChart").CanvasJSChart({
+        "title": {
+          "text": `Health Chart (${currentSurvey.statsPeriod[1]})`
+        },
+        "data": chartData
+      })
     }
 
     getTotalScore(answers) {
