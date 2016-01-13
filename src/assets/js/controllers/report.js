@@ -154,7 +154,7 @@ export class ReportCtrl {
 
       $(isPrev ? "#healthChartPrevQtr" : "#healthChart").CanvasJSChart({
         "title": {
-          "text": `Health Chart (${currentSurvey.statsPeriod[1]})`
+          "text": `Health Report (${currentSurvey.statsPeriod[1]})`
         },
         "data": chartData
       })
