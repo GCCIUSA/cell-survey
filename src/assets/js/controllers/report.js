@@ -70,12 +70,11 @@ export class ReportCtrl {
       for (let surveyVer of this.surveyConfig) {
         if (index >= this.surveyConfig.length - numQtr) {
           let statsPeriodData = {
-            "type": "column",
+            "type": "bar",
             "showInLegend": true,
             "legendText": surveyVer.statsPeriod[1],
             "indexLabel": "{y}",
-            "indexLabelPlacement": "outside",
-            "indexLabelOrientation": "horizontal",
+            "indexLabelFontColor": "#000",
             "dataPoints": [],
             "click": showDetail
           };
@@ -97,6 +96,7 @@ export class ReportCtrl {
         "title": {
           "text": "Quarterly Report"
         },
+        "animationEnabled": true,
         "axisY": {
           "minimum": 0,
           "maximum": 100
@@ -108,7 +108,10 @@ export class ReportCtrl {
     genHealthChart(isPrev) {
       let chartData = [{
         "type": "pie",
-        "indexLabel": "{label} {y}% ({count})",
+        "indexLabel": "{label} #percent% ({y})",
+        "indexLabelFontSize": 14,
+  			"percentFormatString": "#0.##",
+  			"toolTipContent": "#percent% ({y})",
         "dataPoints": []
       }];
       let currentSurvey = this.surveyConfig[this.surveyConfig.length - (isPrev ? 2 : 1)];
@@ -123,7 +126,6 @@ export class ReportCtrl {
       let totalSurveyCount = 0;
       for (let survey of this.reportData) {
         if (survey.surveyId === currentSurvey.id) {
-          //chartData[0].dataPoints.push({ "y": })
           if (survey.totalScore > 80) {
             healthData["Very Healthy"]++;
           }
@@ -145,9 +147,8 @@ export class ReportCtrl {
 
       for (let healthStatus of Object.keys(healthData)) {
         chartData[0].dataPoints.push({
-          "y": healthData[healthStatus] / totalSurveyCount * 100,
-          "label": healthStatus,
-          "count": healthData[healthStatus]
+          "y": healthData[healthStatus],
+          "label": healthStatus
         })
       }
 
