@@ -1,7 +1,6 @@
 <div id="reportCharts">
-  <div id="qtrChart" style="height: 400px;"></div>
-  <hr style="margin: 50px auto;"/>
-  <div class="row">
+  <div id="qtrChart" style="height: 400px;" ng-if="vm.$state.current.name === 'report.qtr'"></div>
+  <div class="row" ng-if="vm.$state.current.name === 'report.health'">
     <div class="col-md-6">
       <div id="healthChart" style="width: 100%; height: 400px;"></div>
     </div>

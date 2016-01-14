@@ -1,9 +1,10 @@
 export class ReportCtrl {
-    constructor($rootScope, utilService, $q, $http) {
+    constructor($rootScope, utilService, $q, $http, $state) {
       this.$rootScope = $rootScope;
       this.utilService = utilService;
       this.$q = $q;
       this.$http = $http;
+      this.$state = $state;
 
       this.init();
     }
@@ -39,9 +40,13 @@ export class ReportCtrl {
               this.surveyConfig = response[0].data;
               this.surveyForms = response[1].data;
 
-              this.genQtrChart(3);
-              this.genHealthChart();
-              this.genHealthChart(true);
+              if (this.$state.current.name === "report.qtr") {
+                this.genQtrChart(3);
+              }
+              else if (this.$state.current.name === "report.health") {
+                this.genHealthChart();
+                this.genHealthChart(true);
+              }
             });
           });
         });
@@ -156,6 +161,7 @@ export class ReportCtrl {
         "title": {
           "text": `Health Report (${currentSurvey.statsPeriod[1]})`
         },
+        "animationEnabled": true,
         "data": chartData
       })
     }
@@ -173,4 +179,4 @@ export class ReportCtrl {
     }
 }
 
-ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http"];
+ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state"];

@@ -1,58 +1,67 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-    <meta charset="UTF-8">
-    <title>GCCI Cell Survey</title>
+  <meta charset="UTF-8">
+  <title>GCCI Cell Survey</title>
 
-    <link rel="stylesheet" type="text/css" href="assets/gen/css/app.min.css"/>
-    <script type="text/javascript" src="assets/gen/js/app.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/gen/css/app.min.css"/>
+  <script type="text/javascript" src="assets/gen/js/app.js"></script>
 </head>
 <body ng-controller="MainCtrl as vm" ng-cloak>
 
-<!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="">GCCI Cell Survey</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li ng-repeat="navItem in ::vm.navItems" ng-class="{'active': vm.isActiveNav(navItem.state)}">
-                    <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
-                </li>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="">GCCI Cell Survey</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li ng-repeat="navItem in ::vm.navItems" ng-class="{'active': vm.isActiveNav(navItem.state)}">
+            <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
+          </li>
+          <li class="dropdown" ng-class="{'active': vm.$state.current.url === '/report'}">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">
+              Report <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a ui-sref="report.qtr">Quarterly Report</a></li>
+              <li><a ui-sref="report.health">Health Report</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-switch on="vm.isLoggedIn()">
-                <li class="dropdown" ng-switch-when="true">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        {{vm.getUserDisplayName()}}
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="" ng-click="vm.logout()">Log Out</a></li>
-                    </ul>
-                </li>
-            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" ng-switch on="vm.isLoggedIn()">
+          <li class="dropdown" ng-switch-when="true">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              {{vm.getUserDisplayName()}}
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="" ng-click="vm.logout()">Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
         </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <ui-view></ui-view>
+      <hr/>
+      &copy; Great Commission Church International
     </div>
-</nav>
 
-<div class="container">
-    <ui-view></ui-view>
-    <hr/>
-    &copy; Great Commission Church International
-</div>
+    <gcci-message message-toggle="gcciMessage.toggle"
+    message-type="{{gcciMessage.type}}"
+    message-title="{{gcciMessage.title}}"
+    message-body="{{gcciMessage.body}}"
+    message-callback="gcciMessage.callback()"></gcci-message>
 
-<gcci-message message-toggle="gcciMessage.toggle"
-              message-type="{{gcciMessage.type}}"
-              message-title="{{gcciMessage.title}}"
-              message-body="{{gcciMessage.body}}"
-              message-callback="gcciMessage.callback()"></gcci-message>
-
-<gcci-login login-toggle="" login-callback=""></gcci-login>
-</body>
-</html>
+    <gcci-login login-toggle="" login-callback=""></gcci-login>
+  </body>
+  </html>

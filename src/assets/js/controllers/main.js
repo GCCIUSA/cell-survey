@@ -10,9 +10,9 @@ export class MainCtrl {
     init() {
         this.navItems = [
             { "label": "Home", "state": "home" },
-            { "label": "Survey", "state": "survey" },
-            { "label": "Report", "state": "report" }
+            { "label": "Survey", "state": "survey" }
         ];
+        console.log(this.$state);
     }
 
     isActiveNav(state) {
