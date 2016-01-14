@@ -11,63 +11,63 @@ import { API } from '../libs/model-api/api';
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
 
 app.run(["$rootScope",
-    ($rootScope) => {
-        // global directives
-        $rootScope.gcciMessage = class {
-            static alert(type, title, body, callback) {
-                this.type = type;
-                this.title = title;
-                this.body = body;
-                this.callback = callback;
-                this.toggle = true;
-            }
+($rootScope) => {
+  // global directives
+  $rootScope.gcciMessage = class {
+    static alert(type, title, body, callback) {
+      this.type = type;
+      this.title = title;
+      this.body = body;
+      this.callback = callback;
+      this.toggle = true;
+    }
 
-            static hide() {
-                this.toggle = false;
-            }
-        };
+    static hide() {
+      this.toggle = false;
+    }
+  };
 
-        // firebase root reference
-        $rootScope.fbRef = new Firebase("https://gcci-cell-survey.firebaseio.com");
+  // firebase root reference
+  $rootScope.fbRef = new Firebase("https://gcci-cell-survey.firebaseio.com");
 
-        // global user data
-        $rootScope.user = null;
+  // global user data
+  $rootScope.user = null;
 
-        // get authentication state
-        $rootScope.$on("$stateChangeStart", (evt, toState) => {
-            // add auth check in state's resolve
-            if (toState.resolve !== undefined && !toState.resolve.hasOwnProperty("stateAuth")) {
-                toState.resolve.stateAuth = ["authService", "$q", (authService, $q) => {
-                    let deferred = $q.defer();
+  // get authentication state
+  $rootScope.$on("$stateChangeStart", (evt, toState) => {
+    // add auth check in state's resolve
+    if (toState.resolve !== undefined && !toState.resolve.hasOwnProperty("stateAuth")) {
+      toState.resolve.stateAuth = ["authService", "$q", (authService, $q) => {
+        let deferred = $q.defer();
 
-                    authService.getAuth().then(() => {
-                        deferred.resolve();
-                    }, () => {
-                        deferred.reject();
-                        authService.login();
-                    });
-
-                    return deferred.promise;
-                }];
-            }
+        authService.getAuth().then(() => {
+          deferred.resolve();
+        }, () => {
+          deferred.reject();
+          authService.login();
         });
 
-        // GCCI Model API
-        $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
+        return deferred.promise;
+      }];
     }
+  });
+
+  // GCCI Model API
+  $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
+}
 ]);
 
 app
-    .config(router)
-    .service("errorService", ErrorService)
-    .service("utilService", UtilService)
-    .service("authService", AuthService)
+.config(router)
+.service("errorService", ErrorService)
+.service("utilService", UtilService)
+.service("authService", AuthService)
 
-    .directive("gcciLogin", gcciLogin)
-    .directive("gcciMessage", gcciMessage)
+.directive("gcciLogin", gcciLogin)
+.directive("gcciMessage", gcciMessage)
 
-    .controller("MainCtrl", MainCtrl)
-    .controller("HomeCtrl", HomeCtrl)
-    .controller("SurveyCtrl", SurveyCtrl)
-    .controller("ReportCtrl", ReportCtrl)
+.controller("MainCtrl", MainCtrl)
+.controller("HomeCtrl", HomeCtrl)
+.controller("SurveyCtrl", SurveyCtrl)
+.controller("ReportCtrl", ReportCtrl)
 ;
