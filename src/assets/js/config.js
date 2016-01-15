@@ -10,8 +10,16 @@ import { API } from '../libs/model-api/api';
 
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
 
-app.run(["$rootScope",
-($rootScope) => {
+app.config(["$httpProvider", ($httpProvider) => {
+  if (!$httpProvider.defaults.headers.get) {
+    $httpProvider.defaults.headers.get = {};
+  }
+  $httpProvider.defaults.headers.get["Cache-Control"] = "no-cache";
+  $httpProvider.defaults.headers.get["Pragma"] = "no-cache";
+  $httpProvider.defaults.headers.get["If-Modified-Since"] = "0";
+}]);
+
+app.run(["$rootScope", ($rootScope) => {
   // global directives
   $rootScope.gcciMessage = class {
     static alert(type, title, body, callback) {
@@ -54,8 +62,7 @@ app.run(["$rootScope",
 
   // GCCI Model API
   $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
-}
-]);
+}]);
 
 app
 .config(router)
