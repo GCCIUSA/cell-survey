@@ -26,7 +26,15 @@ export class ReportCtrl {
           this.$rootScope.api.getDescendants(currentUserNode).then(descendants => {
             let tmpReportData = [];
             for (let descendant of descendants) {
-              tmpReportData = tmpReportData.concat(surveyData.filter(survey => this.utilService.getAttr(descendant, "leaders", "").indexOf(survey.uid) >= 0));
+              let dReportData = [];
+              for (let surveyDataItem of surveyData) {
+                if (this.utilService.getAttr(descendant, "leaders", "").indexOf(surveyDataItem.uid) >= 0) {
+                  let dReportDataItem = surveyDataItem;
+                  dReportDataItem.model = descendant;
+                  dReportData.push(dReportDataItem);
+                }
+              }
+              tmpReportData = tmpReportData.concat(dReportData);
             }
             this.reportData = tmpReportData;
 
@@ -77,7 +85,7 @@ export class ReportCtrl {
           let statsPeriodData = {
             "type": "bar",
             "showInLegend": true,
-            "legendText": surveyVer.statsPeriod[1],
+            "legendText": surveyVer.statsPeriod,
             "indexLabel": "{y}",
             "indexLabelFontColor": "#000",
             "dataPoints": [],
@@ -86,7 +94,7 @@ export class ReportCtrl {
           for (let survey of this.reportData) {
             if (survey.surveyId === surveyVer.id) {
               statsPeriodData.dataPoints.push({
-                "label": survey.displayName,
+                "label": survey.model.title,
                 "y": survey.totalScore,
                 "survey": survey
               });
@@ -99,7 +107,7 @@ export class ReportCtrl {
 
       $("#qtrChart").CanvasJSChart({
         "title": {
-          "text": "Quarterly Report"
+          "text": "季度報表"
         },
         "animationEnabled": true,
         "axisY": {
@@ -122,29 +130,29 @@ export class ReportCtrl {
       let currentSurvey = this.surveyConfig[this.surveyConfig.length - (isPrev ? 2 : 1)];
 
       let healthData = {
-        "Very Unhealthy": 0,
-        "Unhealthy": 0,
-        "Somewhat Healty": 0,
-        "Healty": 0,
-        "Very Healthy": 0
+        "very_unhealth": [0, "很不健康"],
+        "unhealthy": [0, "不健康"],
+        "somewhat_healty": [0, "尚且健康"],
+        "healty": [0, "健康"],
+        "very_healthy": [0, "非常健康"]
       };
       let totalSurveyCount = 0;
       for (let survey of this.reportData) {
         if (survey.surveyId === currentSurvey.id) {
           if (survey.totalScore > 80) {
-            healthData["Very Healthy"]++;
+            healthData["very_healthy"][0]++;
           }
           else if (survey.totalScore > 60) {
-            healthData["Healty"]++;
+            healthData["healty"][0]++;
           }
           else if (survey.totalScore > 40) {
-            healthData["Somewhat Healty"]++;
+            healthData["somewhat_healty"][0]++;
           }
           else if (survey.totalScore > 20) {
-            healthData["Unhealty"]++;
+            healthData["unhealthy"][0]++;
           }
           else {
-            healthData["Very Unhealthy"]++;
+            healthData["very_unhealth"][0]++;
           }
           totalSurveyCount++;
         }
@@ -152,14 +160,14 @@ export class ReportCtrl {
 
       for (let healthStatus of Object.keys(healthData)) {
         chartData[0].dataPoints.push({
-          "y": healthData[healthStatus],
-          "label": healthStatus
+          "y": healthData[healthStatus][0],
+          "label": healthData[healthStatus][1]
         })
       }
 
       $(isPrev ? "#healthChartPrevQtr" : "#healthChart").CanvasJSChart({
         "title": {
-          "text": `Health Report (${currentSurvey.statsPeriod[1]})`
+          "text": `健康報表 (${currentSurvey.statsPeriod})`
         },
         "animationEnabled": true,
         "data": chartData

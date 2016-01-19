@@ -21,19 +21,20 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
   })
 
   .state("report", {
+    "url": "/report",
     "template": "<ui-view></ui-view>",
     "abstract": true
   })
 
   .state("report.qtr", {
-    "url": "/report",
+    "url": "/qtr",
     "templateUrl": url("report"),
     "controller": "ReportCtrl as vm",
     "resolve": {}
   })
 
   .state("report.health", {
-    "url": "/report",
+    "url": "/health",
     "templateUrl": url("report"),
     "controller": "ReportCtrl as vm",
     "resolve": {}

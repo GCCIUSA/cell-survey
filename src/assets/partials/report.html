@@ -18,9 +18,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">
           {{vm.selectedSurvey.displayName}}
-          {{vm.utilService.displayDate(vm.selectedSurveyConfig.statsPeriod[0])}}
           -
-          {{vm.utilService.displayDate(vm.selectedSurveyConfig.statsPeriod[1])}}
+          {{vm.selectedSurveyConfig.statsPeriod}}
         </h4>
       </div>
       <div class="modal-body" style="overflow-y: auto;">
