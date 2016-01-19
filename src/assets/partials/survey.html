@@ -8,7 +8,7 @@
   <div ng-if="vm.currentSurvey">
     <blockquote class="pull-right survey-period">
       調查季度: <b>{{vm.currentSurvey.statsPeriod}}</b>
-      <p class="sub-text">提交截止日期: {{vm.utilService.displayDate(vm.currentSurvey.openPeriod[1])}}</p>
+      <p class="sub-text hidden-print">提交截止日期: {{vm.utilService.displayDate(vm.currentSurvey.openPeriod[1])}}</p>
     </blockquote>
     <table class="table table-hover">
       <thead>
@@ -47,6 +47,6 @@
       <div class="pull-right">總分數 {{vm.totalScore}}</div>
       <div class="clearfix"></div>
     </div>
-    <button class="btn btn-primary pull-right" ng-click="vm.submitSurvey()" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === true">Submit Survey</button>
+    <button class="btn btn-primary pull-right hidden-print" ng-click="vm.submitSurvey()" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === true">Submit Survey</button>
     <div class="clearfix"></div>
   </div>
