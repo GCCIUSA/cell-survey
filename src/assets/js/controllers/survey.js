@@ -35,6 +35,7 @@ export class SurveyCtrl {
             this.currentSurvey.answers = [];
           }
           this.getTotalScore();
+          this.getCategoryScore();
         });
       });
 
@@ -77,6 +78,7 @@ export class SurveyCtrl {
       }
     }
     this.getTotalScore();
+    this.getCategoryScore();
   }
 
   /**
@@ -96,7 +98,28 @@ export class SurveyCtrl {
     for (let answer of this.currentSurvey.answers) {
       totalScore += parseInt(answer.split(",")[2]);
     }
-    this.totalScore = totalScore === 0 ? "N/A" : totalScore;
+    this.totalScore = totalScore;
+  }
+
+  /**
+  * calcuate total score for a category
+  */
+  getCategoryScore() {
+    let categoryScore = {};
+    for (let answer of this.currentSurvey.answers) {
+      let answerSplit = answer.split(",");
+      let catIndex = answerSplit[0];
+
+      if (!categoryScore.hasOwnProperty(catIndex)) {
+        categoryScore[catIndex] = 0;
+      }
+      categoryScore[catIndex] += parseInt(answerSplit[2]);
+    }
+    this.categoryScore = categoryScore;
+  }
+
+  categoryScoreLabel(score = 0) {
+    return `${score}分`;
   }
 
   /**
