@@ -61,7 +61,7 @@ gulp.task("css", function () {
   ])
   .pipe(plugins.less())
   .pipe(plugins.autoprefixer())
-  .pipe(plugins.minifyCss());
+  .pipe(plugins.cssnano());
 
   return streamqueue({ objectMode: true }).queue(libs).queue(custom).done()
   .pipe(plugins.concat("app.min.css"))
