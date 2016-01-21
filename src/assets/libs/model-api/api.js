@@ -20,6 +20,28 @@ export class API {
         return this._LEVELS;
     }
 
+    getNodeByUid(uid) {
+      let deferred = $.Deferred();
+
+      this._ref.orderByKey().once("value", (snapshot) => {
+        let nodes = [];
+
+        for (let node of this._parse(snapshot.val())) {
+          if (node.leaders && node.leaders.indexOf(uid) >= 0) {
+            nodes.push(node);
+          }
+        }
+        if (nodes.length > 0) {
+          deferred.resolve(nodes);
+        }
+        else {
+          deferred.reject();
+        }
+      });
+
+      return deferred.promise();
+    }
+
     /**
      * Retrieves node object by id.
      *
@@ -137,15 +159,16 @@ export class API {
      *
      * @method getDescendants
      * @param node node object.
+     * @param levels get specific levels, get all if undefined
      * @returns {Promise} array of descendants
      */
-    getDescendants(node) {
+    getDescendants(node, levels) {
         let deferred = $.Deferred();
 
         this._ref.orderByChild("depth").startAt(node.depth + 1).once("value", (snapshot) => {
             let descendants = [], parsed = this._parse(snapshot.val());
             for (let item of parsed) {
-                if (item.path.substr(0, node.path.length) === node.path) {
+                if ((!levels || levels.indexOf(item.level) >= 0) && item.path.substr(0, node.path.length) === node.path) {
                     descendants.push(item);
                 }
             }

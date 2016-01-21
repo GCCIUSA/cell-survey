@@ -10,7 +10,8 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
   .state("home", {
     "url": "/home",
     "templateUrl": url("home"),
-    "controller": "HomeCtrl as vm"
+    "controller": "HomeCtrl as vm",
+    "resolve": {}
   })
 
   .state("survey", {

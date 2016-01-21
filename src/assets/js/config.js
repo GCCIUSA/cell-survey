@@ -41,6 +41,9 @@ app.run(["$rootScope", ($rootScope) => {
   // global user data
   $rootScope.user = null;
 
+  // GCCI Model API
+  $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
+
   // get authentication state
   $rootScope.$on("$stateChangeStart", (evt, toState) => {
     // add auth check in state's resolve
@@ -52,16 +55,15 @@ app.run(["$rootScope", ($rootScope) => {
           deferred.resolve();
         }, () => {
           deferred.reject();
-          authService.login();
+          if (toState.name !== "home") {
+            authService.login();
+          }
         });
 
         return deferred.promise;
       }];
     }
   });
-
-  // GCCI Model API
-  $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
 }]);
 
 app

@@ -30,7 +30,7 @@
           <li ng-repeat="navItem in ::vm.navItems" ng-class="{'active': vm.isActiveNav(navItem.state)}">
             <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
           </li>
-          <!-- <li class="dropdown" ng-class="{'active': vm.$state.current.url === '/report'}">
+          <li class="dropdown" ng-class="{'active': vm.$state.current.url === '/report'}">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">
               Report <span class="caret"></span>
             </a>
@@ -38,34 +38,38 @@
               <li><a ui-sref="report.qtr">Quarterly Report</a></li>
               <li><a ui-sref="report.health">Health Report</a></li>
             </ul>
-          </li> -->
+          </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" ng-switch on="vm.isLoggedIn()">
+        <ul class="nav navbar-nav navbar-right" ng-switch on="vm.$rootScope.user !== null">
           <li class="dropdown" ng-switch-when="true">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               {{vm.getUserDisplayName()}}
-              <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="" ng-click="vm.logout()">Log Out</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    <div class="container">
-      <ui-view></ui-view>
-      <hr/>
-      &copy; Great Commission Church International
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="" ng-click="vm.logout()">Log Out</a></li>
+            </ul>
+          </li>
+          <li ng-switch-when="false">
+            <a href="" ng-click="vm.authService.login()">Login</a>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
     </div>
+  </nav>
 
-    <gcci-message message-toggle="gcciMessage.toggle"
-    message-type="{{gcciMessage.type}}"
-    message-title="{{gcciMessage.title}}"
-    message-body="{{gcciMessage.body}}"
-    message-callback="gcciMessage.callback()"></gcci-message>
+  <div class="container">
+    <ui-view></ui-view>
+    <hr/>
+    &copy; Great Commission Church International
+  </div>
 
-    <gcci-login login-toggle="" login-callback=""></gcci-login>
-  </body>
-  </html>
+  <gcci-message message-toggle="gcciMessage.toggle"
+  message-type="{{gcciMessage.type}}"
+  message-title="{{gcciMessage.title}}"
+  message-body="{{gcciMessage.body}}"
+  message-callback="gcciMessage.callback()"></gcci-message>
+
+  <gcci-login login-toggle="" login-callback=""></gcci-login>
+</body>
+</html>

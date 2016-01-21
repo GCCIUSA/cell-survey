@@ -23,15 +23,14 @@ export class ReportCtrl {
 
           // find survey data for descendants of current user
           this.reportData = [];
-          this.$rootScope.api.getDescendants(currentUserNode).then(descendants => {
+          this.$rootScope.api.getDescendants(currentUserNode, ["小組"]).then(descendants => {
+            this.descendants = descendants;
             let tmpReportData = [];
             for (let descendant of descendants) {
               let dReportData = [];
               for (let surveyDataItem of surveyData) {
                 if (this.utilService.getAttr(descendant, "leaders", "").indexOf(surveyDataItem.uid) >= 0) {
-                  let dReportDataItem = surveyDataItem;
-                  dReportDataItem.model = descendant;
-                  dReportData.push(dReportDataItem);
+                  dReportData.push(surveyDataItem);
                 }
               }
               tmpReportData = tmpReportData.concat(dReportData);
@@ -59,6 +58,9 @@ export class ReportCtrl {
           });
         });
       });
+
+      this.fontSize = 16;
+      this.titleSize = 30;
     }
 
     genQtrChart(numQtr) {
@@ -88,32 +90,49 @@ export class ReportCtrl {
             "legendText": surveyVer.statsPeriod,
             "indexLabel": "{y}",
             "indexLabelFontColor": "#000",
+            "indexLabelFontSize": this.fontSize,
             "dataPoints": [],
             "click": showDetail
           };
-          for (let survey of this.reportData) {
-            if (survey.surveyId === surveyVer.id) {
-              statsPeriodData.dataPoints.push({
-                "label": survey.model.title,
-                "y": survey.totalScore,
-                "survey": survey
-              });
+          for (let descendant of this.descendants) {
+            let dataPoint = {
+              "label": descendant.title,
+              "y": 0
+            };
+            for (let survey of this.reportData) {
+              if (this.utilService.getAttr(descendant, "leaders", "").indexOf(survey.uid) >= 0 && survey.surveyId === surveyVer.id) {
+                dataPoint.y = survey.totalScore;
+                dataPoint.survey = survey;
+                break;
+              }
             }
+            statsPeriodData.dataPoints.push(dataPoint);
           }
           chartData.push(statsPeriodData);
         }
         index++;
       }
 
-      $("#qtrChart").CanvasJSChart({
+      let chartHeight = chartData[0].dataPoints.length * chartData.length * 30 + 120;
+      $("#qtrChart").css("height", `${chartHeight}px`).CanvasJSChart({
         "title": {
-          "text": "季度報表"
+          "text": "季度報表",
+          "fontSize": this.titleSize,
         },
         "animationEnabled": true,
         "axisY": {
           "minimum": 0,
-          "maximum": 100
+          "maximum": 100,
+          "labelFontSize": this.fontSize
         },
+        "axisX": {
+          "labelFontSize": this.fontSize,
+          "interval": 1
+        },
+        "legend": {
+          "fontSize": this.fontSize
+        },
+        "dataPointMaxWidth": 20,
         "data": chartData
       });
     }
@@ -122,7 +141,7 @@ export class ReportCtrl {
       let chartData = [{
         "type": "pie",
         "indexLabel": "{label} #percent% ({y})",
-        "indexLabelFontSize": 14,
+        "indexLabelFontSize": this.fontSize,
   			"percentFormatString": "#0.##",
   			"toolTipContent": "#percent% ({y})",
         "dataPoints": []
@@ -167,7 +186,8 @@ export class ReportCtrl {
 
       $(isPrev ? "#healthChartPrevQtr" : "#healthChart").CanvasJSChart({
         "title": {
-          "text": `健康報表 (${currentSurvey.statsPeriod})`
+          "text": `健康報表 (${currentSurvey.statsPeriod})`,
+          "fontSize": this.titleSize,
         },
         "animationEnabled": true,
         "data": chartData

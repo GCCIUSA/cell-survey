@@ -35,7 +35,5 @@ export class MainCtrl {
 MainCtrl.$inject = ["$state", "authService", "$rootScope"];
 
 export class HomeCtrl {
-  constructor() {
-
-  }
+  
 }

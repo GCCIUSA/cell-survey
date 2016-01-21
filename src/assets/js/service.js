@@ -10,10 +10,11 @@ export class ErrorService {
 
 
 export class AuthService {
-  constructor($rootScope, $firebaseAuth, $q, $http) {
+  constructor($rootScope, $firebaseAuth, $q, $http, $state) {
     this.$rootScope = $rootScope;
     this.$q = $q;
     this.$http = $http;
+    this.$state = $state;
 
     this.fbAuth = $firebaseAuth(this.$rootScope.fbRef);
   }
@@ -41,8 +42,20 @@ export class AuthService {
         this.$http.get(url).then(
           () => { // google token is valid
             this.authInProgress = false;
-            this.$rootScope.user = authData;
-            deferred.resolve();
+
+            // get user node from GCCI structure model
+            this.$rootScope.api.getNodeByUid(authData.auth.uid).then((nodes) => {
+              this.$rootScope.user = authData;
+              this.$rootScope.user.models = nodes;
+              deferred.resolve();
+            }).fail(() => {
+              this.$rootScope.gcciMessage.alert(
+                "danger",
+                "Authentication Failed",
+                "Authentication failed, please contact administrator for access.",
+                () => { this.logout(); }
+              );
+            });
           },
           (error) => { // google token is invalid
             this.authInProgress = false;
@@ -84,16 +97,16 @@ export class AuthService {
   }
 
   logout() {
-    return this.fbAuth.$unauth();
+    this.fbAuth.$unauth();
   }
 }
 
-AuthService.$inject = ["$rootScope", "$firebaseAuth", "$q", "$http"];
+AuthService.$inject = ["$rootScope", "$firebaseAuth", "$q", "$http", "$state"];
 
 
 export class UtilService {
   constructor() {
-    
+
   }
 
   arrayFromSnapshotVal(val) {
