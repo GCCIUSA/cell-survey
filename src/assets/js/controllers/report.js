@@ -60,6 +60,9 @@ export class ReportCtrl {
               this.genHealthChart();
               this.genHealthChart(true);
             }
+            else if (this.$state.current.name === "report.category") {
+              this.genCategoryChart(3);
+            }
           });
         });
       });
@@ -86,7 +89,7 @@ export class ReportCtrl {
         .off("shown.bs.modal")
         .on("shown.bs.modal", () => {
           $(".modal-body").animate({ "scrollTop": 0});
-          this.genCategoryChart(numQtr);
+          this.genCellCategoryChart(numQtr);
         })
         .on("hidden.bs.modal", () => {
           $("#categoryChart").empty();
@@ -151,7 +154,7 @@ export class ReportCtrl {
     });
   }
 
-  genCategoryChart(numQtr) {
+  genCellCategoryChart(numQtr) {
     let chartData = [], index = 0;
 
     let showForm = (e) => {
@@ -197,10 +200,69 @@ export class ReportCtrl {
       index++;
     }
 
-    $("#categoryChart").CanvasJSChart({
+    $("#cellCategoryChart").CanvasJSChart({
       "title": {
         "text": "分類統計",
         "fontSize": 22,
+      },
+      "animationEnabled": true,
+      "axisY": {
+        "minimum": 0,
+        "maximum": 24,
+        "labelFontSize": this.fontSize,
+        "interval": 5
+      },
+      "axisX": {
+        "labelFontSize": this.fontSize
+      },
+      "legend": {
+        "fontSize": this.fontSize
+      },
+      "data": chartData
+    });
+  }
+
+  genCategoryChart(numQtr) {
+    let chartData = [], index = 0;
+
+    for (let surveyVer of this.surveyConfig) {
+      if (index >= this.surveyConfig.length - numQtr) {
+        let statsPeriodData = {
+          "type": "column",
+          "showInLegend": true,
+          "legendText": surveyVer.statsPeriod,
+          "indexLabel": "{y}",
+          "indexLabelFontColor": "#000",
+          "indexLabelFontSize": this.fontSize,
+          "dataPoints": [],
+        };
+
+
+        // assume categories of all form versions are the same
+        let surveyForm = this.surveyForms[0].form;
+        for (let catIndex = 0; catIndex < surveyForm.length; catIndex++) {
+          let catScore = 0;
+          let catCount = 0;
+          for (let survey of this.reportData) {
+            if (survey.surveyId === surveyVer.id) {
+              survey.answers.filter(x => parseInt(x.split(",")[0]) === catIndex).map(x => catScore += parseInt(x.split(",")[2]));
+              catCount++;
+            }
+          }
+          statsPeriodData.dataPoints.push({
+            "label": surveyForm[catIndex].title,
+            "y": Math.round(catScore / catCount * 10) / 10
+          });
+        }
+        chartData.push(statsPeriodData);
+      }
+      index++;
+    }
+
+    $("#categoryChart").CanvasJSChart({
+      "title": {
+        "text": "分類統計",
+        "fontSize": this.titleSize,
       },
       "animationEnabled": true,
       "axisY": {

@@ -40,6 +40,13 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
     "controller": "ReportCtrl as vm",
     "resolve": {}
   })
+
+  .state("report.category", {
+    "url": "/category",
+    "templateUrl": url("report"),
+    "controller": "ReportCtrl as vm",
+    "resolve": {}
+  })
   ;
 }
 

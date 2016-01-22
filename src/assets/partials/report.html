@@ -8,6 +8,7 @@
       <div id="healthChartPrevQtr" style="width: 100%; height: 400px;"></div>
     </div>
   </div>
+  <div id="categoryChart" ng-if="vm.$state.current.name === 'report.category'"></div>
 </div>
 
 <!-- report detail modal -->
@@ -23,7 +24,7 @@
         </h4>
       </div>
       <div class="modal-body" style="overflow-y: auto;">
-        <div id="categoryChart" style="height: 200px;"></div>
+        <div id="cellCategoryChart" style="height: 200px;"></div>
         <hr/>
         <table class="table table-hover">
             <thead>
