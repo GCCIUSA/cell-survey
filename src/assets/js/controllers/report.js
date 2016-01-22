@@ -88,6 +88,9 @@ export class ReportCtrl {
           $(".modal-body").animate({ "scrollTop": 0});
           this.genCategoryChart(numQtr);
         })
+        .on("hidden.bs.modal", () => {
+          $("#categoryChart").empty();
+        })
         .modal("show");
     };
 
@@ -132,7 +135,7 @@ export class ReportCtrl {
       "animationEnabled": true,
       "axisY": {
         "minimum": 0,
-        "maximum": 109,
+        "maximum": 105,
         "labelFontSize": this.fontSize,
         "interval": 10
       },
