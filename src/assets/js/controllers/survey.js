@@ -10,6 +10,8 @@ export class SurveyCtrl {
   }
 
   init() {
+    // TODO add permission
+
     let surveyConfig = this.$http.get("survey.json"),
     surveyForms = this.$http.get("forms.json");
 
