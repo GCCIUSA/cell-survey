@@ -1,9 +1,9 @@
 /**
  * GCCI Model API
  *
- * @class API
+ * @class ModelAPI
  */
-export class API {
+export class ModelAPI {
     constructor(ref) {
         this._ref = ref;
 

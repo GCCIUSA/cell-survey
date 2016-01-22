@@ -1,29 +1,32 @@
 export class ReportCtrl {
-    constructor($rootScope, utilService, $q, $http, $state) {
+    constructor($rootScope, utilService, $q, $http, $state, ModelAPI) {
       this.$rootScope = $rootScope;
       this.utilService = utilService;
       this.$q = $q;
       this.$http = $http;
       this.$state = $state;
+      this.ModelAPI = ModelAPI;
 
       this.init();
     }
 
     init() {
+      
+
       let surveyConfig = this.$http.get("survey.json");
       let surveyForms = this.$http.get("forms.json");
 
-      this.$rootScope.fbRef.once("value", snapshot => {
+      this.$rootScope.appRef.once("value", snapshot => {
         let surveyData = this.utilService.arrayFromSnapshotVal(snapshot.val());
 
-        this.$rootScope.api.getTree().then(tree => {
+        this.ModelAPI.getTree().then(tree => {
           // find current user's node with lowest depth (highest level)
           let currentUserNodes = tree.filter(node => this.utilService.getAttr(node, "leaders", "").indexOf(this.$rootScope.user.uid) >= 0);
           let currentUserNode = currentUserNodes.sort((a, b) => a.depth - b.depth)[0];
 
           // find survey data for descendants of current user
           this.reportData = [];
-          this.$rootScope.api.getDescendants(currentUserNode, ["小組"]).then(descendants => {
+          this.ModelAPI.getDescendants(currentUserNode, ["小組"]).then(descendants => {
             this.descendants = descendants;
             let tmpReportData = [];
             for (let descendant of descendants) {
@@ -207,4 +210,4 @@ export class ReportCtrl {
     }
 }
 
-ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state"];
+ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state", "ModelAPI"];

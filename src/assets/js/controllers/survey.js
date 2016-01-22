@@ -1,11 +1,10 @@
 export class SurveyCtrl {
-  constructor($http, $rootScope, $q, utilService, $firebaseArray, stateAuth) {
+  constructor($http, $rootScope, $q, utilService, $firebaseArray) {
     this.$http = $http;
     this.$rootScope = $rootScope;
     this.$q = $q;
     this.utilService = utilService;
     this.$firebaseArray = $firebaseArray;
-    this.stateAuth = stateAuth;
 
     this.init();
   }
@@ -18,7 +17,7 @@ export class SurveyCtrl {
       this.currentSurvey = response[0].data[response[0].data.length - 1];
       this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
 
-      this.$rootScope.fbRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
+      this.$rootScope.appRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
         // answers are string array in the format of i,j,k
         // i - category index, j - item index, k - option index
         // example: ["0,1,1", "0,2,1"]
@@ -127,7 +126,7 @@ export class SurveyCtrl {
   */
   submitSurvey() {
     if (this.validateSurveyForm()) {
-      this.$firebaseArray(this.$rootScope.fbRef).$add({
+      this.$firebaseArray(this.$rootScope.appRef).$add({
         "uid": this.$rootScope.user.uid,
         "displayName": this.$rootScope.user.google.displayName,
         "email": this.$rootScope.user.google.email,
@@ -161,4 +160,4 @@ export class SurveyCtrl {
   }
 }
 
-SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray", "stateAuth"];
+SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray"];

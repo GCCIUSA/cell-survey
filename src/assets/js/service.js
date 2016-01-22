@@ -10,13 +10,13 @@ export class ErrorService {
 
 
 export class AuthService {
-  constructor($rootScope, $firebaseAuth, $q, $http, $state) {
+  constructor($rootScope, $q, $http, Auth, ModelAPI, GCCIMessage) {
     this.$rootScope = $rootScope;
     this.$q = $q;
     this.$http = $http;
-    this.$state = $state;
-
-    this.fbAuth = $firebaseAuth(this.$rootScope.fbRef);
+    this.Auth = Auth;
+    this.ModelAPI = ModelAPI;
+    this.GCCIMessage = GCCIMessage;
   }
 
   getAuth() {
@@ -30,51 +30,54 @@ export class AuthService {
     * unfortunately, as of now, there's no way for firebase to obtain a google refresh token, will have to
     * re-authenticate user when google access token has expired.
     */
-
     let deferred = this.$q.defer();
 
-    // check if firebase token is valid
-    this.authInProgress = true;
-    this.fbAuth.$onAuth((authData) => {
-      if (authData) { // firebase token is valid
+    this.Auth.$requireAuth().then(
+      (authData) => { // firebase token is valid
         // check if google token is valid
         let url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${authData.google.accessToken}`;
         this.$http.get(url).then(
           () => { // google token is valid
-            this.authInProgress = false;
-
             // get user node from GCCI structure model
-            this.$rootScope.api.getNodeByUid(authData.auth.uid).then((nodes) => {
-              this.$rootScope.user = authData;
-              this.$rootScope.user.models = nodes;
+            this.ModelAPI.getNodeByUid(authData.auth.uid).then((nodes) => { // user in gcci model
+              authData.models = nodes;
+              this.setUser(authData);
               deferred.resolve();
-            }).fail(() => {
-              this.$rootScope.gcciMessage.alert(
+            }).fail(() => { // user not in gcci model
+              this.unsetUser();
+              this.GCCIMessage.alert(
                 "danger",
                 "Authentication Failed",
-                "Authentication failed, please contact administrator for access.",
-                () => { this.logout(); }
+                "Authentication failed, please contact administrator for access."
               );
+              deferred.reject();
             });
           },
           (error) => { // google token is invalid
-            this.authInProgress = false;
+            this.unsetUser();
             if (error.data.error === "invalid_token") {
-              this.$rootScope.gcciMessage.alert(
+              this.GCCIMessage.alert(
                 "danger",
                 "Authentication Timeout",
                 "Authentication timed out, please login again."
               );
             }
+            else {
+              this.GCCIMessage.alert(
+                "danger",
+                "Authentication Provider Error",
+                "Authentication failed for provider."
+              );
+            }
             deferred.reject(error);
           }
         );
+      },
+      (error) => { // firebase token is invalid
+        this.unsetUser();
+        deferred.reject(error);
       }
-      else { // firebase token is invalid
-        this.authInProgress = false;
-        deferred.reject();
-      }
-    });
+    );
 
     return deferred.promise;
   }
@@ -87,8 +90,8 @@ export class AuthService {
       ].join(" ")
     };
 
-    this.fbAuth.$authWithOAuthRedirect("google", options).catch(() => {
-      this.$rootScope.gcciMessage.alert(
+    this.Auth.$authWithOAuthRedirect("google", options).catch(() => {
+      this.GCCIMessage.alert(
         "danger",
         "Authentication Error",
         "Authentication failed, please try again."
@@ -97,16 +100,29 @@ export class AuthService {
   }
 
   logout() {
-    this.fbAuth.$unauth();
+    this.Auth.$unauth();
+    this.unsetUser();
+  }
+
+  isLoggedIn() {
+    return this.$rootScope.user !== null;
+  }
+
+  setUser(data) {
+    this.$rootScope.user = data;
+  }
+
+  unsetUser() {
+    this.$rootScope.user = null;
   }
 }
 
-AuthService.$inject = ["$rootScope", "$firebaseAuth", "$q", "$http", "$state"];
+AuthService.$inject = ["$rootScope", "$q", "$http", "Auth", "ModelAPI", "GCCIMessage"];
 
 
 export class UtilService {
-  constructor() {
-
+  constructor($rootScope) {
+    this.$rootScope = $rootScope;
   }
 
   arrayFromSnapshotVal(val) {
@@ -130,6 +146,10 @@ export class UtilService {
       let d = this.setLocaleDate(val);
       return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
     }
+  }
+
+  userHasLevels(levels) {
+    return this.$rootScope.user.models.find(node => levels.indexOf(node.level) >= 0);
   }
 
   setLocaleDate(val, isEnd = false) {
@@ -156,3 +176,5 @@ export class UtilService {
     }
   }
 }
+
+UtilService.$inject = ["$rootScope"];

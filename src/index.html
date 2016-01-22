@@ -27,10 +27,13 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ng-repeat="navItem in ::vm.navItems" ng-class="{'active': vm.isActiveNav(navItem.state)}">
-            <a ui-sref="{{::navItem.state}}">{{::navItem.label}}</a>
+          <li ng-class="{'active': vm.isActiveNav('home')}">
+            <a ui-sref="home">Home</a>
           </li>
-          <li class="dropdown" ng-class="{'active': vm.$state.current.url === '/report'}">
+          <li ng-class="{'active': vm.isActiveNav('survey')}" ng-if="vm.showSurveyTab()">
+            <a ui-sref="survey">Survey</a>
+          </li>
+          <li class="dropdown" ng-class="{'active': vm.isActiveNav('report')}" ng-if="vm.showReportTab()">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">
               Report <span class="caret"></span>
             </a>
@@ -40,7 +43,7 @@
             </ul>
           </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" ng-switch on="vm.$rootScope.user !== null">
+        <ul class="nav navbar-nav navbar-right" ng-switch on="vm.authService.isLoggedIn()">
           <li class="dropdown" ng-switch-when="true">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               {{vm.getUserDisplayName()}}
@@ -64,12 +67,10 @@
     &copy; Great Commission Church International
   </div>
 
-  <gcci-message message-toggle="gcciMessage.toggle"
-  message-type="{{gcciMessage.type}}"
-  message-title="{{gcciMessage.title}}"
-  message-body="{{gcciMessage.body}}"
-  message-callback="gcciMessage.callback()"></gcci-message>
-
-  <gcci-login login-toggle="" login-callback=""></gcci-login>
+  <gcci-message message-toggle="vm.GCCIMessage.toggle"
+                message-type="{{vm.GCCIMessage.type}}"
+                message-title="{{vm.GCCIMessage.title}}"
+                message-body="{{vm.GCCIMessage.body}}"
+                message-callback="vm.GCCIMessage.callback()"></gcci-message>
 </body>
 </html>

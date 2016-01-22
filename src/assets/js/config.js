@@ -1,16 +1,21 @@
 import { router } from './router';
 import { ErrorService, UtilService, AuthService } from './service';
-import { gcciLogin } from './directives/gcci-login';
 import { gcciMessage } from './directives/gcci-message';
 import { MainCtrl, HomeCtrl } from './controllers/main';
 import { SurveyCtrl } from './controllers/survey';
 import { ReportCtrl } from './controllers/report';
-import { API } from '../libs/model-api/api';
+import { ModelAPI } from '../libs/model-api/api';
 
 
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
 
+app.constant("REF", {
+  "APP_REF": new Firebase("https://gcci-cell-survey.firebaseio.com"),
+  "MODEL_REF": new Firebase("https://gcci-model.firebaseio.com")
+});
+
 app.config(["$httpProvider", ($httpProvider) => {
+  // disable cache
   if (!$httpProvider.defaults.headers.get) {
     $httpProvider.defaults.headers.get = {};
   }
@@ -19,9 +24,16 @@ app.config(["$httpProvider", ($httpProvider) => {
   $httpProvider.defaults.headers.get["If-Modified-Since"] = "0";
 }]);
 
-app.run(["$rootScope", ($rootScope) => {
-  // global directives
-  $rootScope.gcciMessage = class {
+app.factory("Auth", ["$firebaseAuth", "REF", ($firebaseAuth, REF) => {
+  return $firebaseAuth(REF.APP_REF);
+}]);
+
+app.factory("ModelAPI", ["REF", (REF) => {
+  return new ModelAPI(REF.MODEL_REF);
+}]);
+
+app.factory("GCCIMessage", [() => {
+  return class {
     static alert(type, title, body, callback) {
       this.type = type;
       this.title = title;
@@ -34,15 +46,14 @@ app.run(["$rootScope", ($rootScope) => {
       this.toggle = false;
     }
   };
+}]);
 
+app.run(["$rootScope", "REF", ($rootScope, REF) => {
   // firebase root reference
-  $rootScope.fbRef = new Firebase("https://gcci-cell-survey.firebaseio.com");
+  $rootScope.appRef = REF.APP_REF;
 
   // global user data
   $rootScope.user = null;
-
-  // GCCI Model API
-  $rootScope.api = new API(new Firebase("https://gcci-model.firebaseio.com"));
 
   // get authentication state
   $rootScope.$on("$stateChangeStart", (evt, toState) => {
@@ -51,14 +62,19 @@ app.run(["$rootScope", ($rootScope) => {
       toState.resolve.stateAuth = ["authService", "$q", (authService, $q) => {
         let deferred = $q.defer();
 
-        authService.getAuth().then(() => {
-          deferred.resolve();
-        }, () => {
-          deferred.reject();
-          if (toState.name !== "home") {
-            authService.login();
+        authService.getAuth().then(
+          () => {
+            deferred.resolve();
+          },
+          () => {
+            if (toState.name === "home") {
+              deferred.resolve();
+            }
+            else {
+              deferred.reject();
+            }
           }
-        });
+        );
 
         return deferred.promise;
       }];
@@ -72,7 +88,6 @@ app
 .service("utilService", UtilService)
 .service("authService", AuthService)
 
-.directive("gcciLogin", gcciLogin)
 .directive("gcciMessage", gcciMessage)
 
 .controller("MainCtrl", MainCtrl)

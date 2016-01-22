@@ -77,9 +77,18 @@ gulp.task("fonts", function () {
 });
 
 /**
+* images
+*/
+gulp.task("images", function () {
+  return gulp.src([assetPath + "/imgs/*"])
+  .pipe(gulp.dest(genPath + "/imgs/"));
+});
+
+
+/**
 * compile all tasks
 */
-gulp.task("compile", ["css", "fonts", "js-dev", "js-release"]);
+gulp.task("compile", ["css", "fonts", "images", "js-dev", "js-release"]);
 
 /**
 * watch tasks
