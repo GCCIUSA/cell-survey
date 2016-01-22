@@ -115,6 +115,10 @@ export class AuthService {
   unsetUser() {
     this.$rootScope.user = null;
   }
+
+  getUser() {
+    return this.$rootScope.user;
+  }
 }
 
 AuthService.$inject = ["$rootScope", "$q", "$http", "Auth", "ModelAPI", "GCCIMessage"];
@@ -148,10 +152,6 @@ export class UtilService {
     }
   }
 
-  userHasLevels(levels) {
-    return this.$rootScope.user.models.find(node => levels.indexOf(node.level) >= 0);
-  }
-
   setLocaleDate(val, isEnd = false) {
     if (val) {
       let d = new Date(),
@@ -178,3 +178,29 @@ export class UtilService {
 }
 
 UtilService.$inject = ["$rootScope"];
+
+
+export class PermissionService {
+  constructor(authService, $state) {
+    this.authService = authService;
+    this.$state = $state;
+  }
+
+  canAccessSurvey() {
+    return this.authService.isLoggedIn() && this.userHasLevels(["小組"]);
+  }
+
+  canAccessReport() {
+    return this.authService.isLoggedIn() && this.userHasLevels(["牧區", "區", "實習區"]);
+  }
+
+  redirectHome() {
+    this.$state.go("home");
+  }
+
+  userHasLevels(levels) {
+    return this.authService.getUser().models.find(node => levels.indexOf(node.level) >= 0);
+  }
+}
+
+PermissionService.$inject = ["authService", "$state"];

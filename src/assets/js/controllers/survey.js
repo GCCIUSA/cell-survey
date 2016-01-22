@@ -1,16 +1,21 @@
 export class SurveyCtrl {
-  constructor($http, $rootScope, $q, utilService, $firebaseArray) {
+  constructor($http, $rootScope, $q, utilService, $firebaseArray, permissionService, authService, GCCIMessage) {
     this.$http = $http;
     this.$rootScope = $rootScope;
     this.$q = $q;
     this.utilService = utilService;
     this.$firebaseArray = $firebaseArray;
+    this.permissionService = permissionService;
+    this.authService = authService;
+    this.GCCIMessage = GCCIMessage;
 
     this.init();
   }
 
   init() {
-    // TODO add permission
+    if (!this.permissionService.canAccessSurvey()) {
+      this.permissionService.redirectHome();
+    }
 
     let surveyConfig = this.$http.get("survey.json"),
     surveyForms = this.$http.get("forms.json");
@@ -19,7 +24,7 @@ export class SurveyCtrl {
       this.currentSurvey = response[0].data[response[0].data.length - 1];
       this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
 
-      this.$rootScope.appRef.orderByChild("uid").equalTo(this.$rootScope.user.uid).once("value", (snapshot) => {
+      this.$rootScope.appRef.orderByChild("uid").equalTo(this.authService.getUser().uid).once("value", (snapshot) => {
         // answers are string array in the format of i,j,k
         // i - category index, j - item index, k - option index
         // example: ["0,1,1", "0,2,1"]
@@ -129,9 +134,9 @@ export class SurveyCtrl {
   submitSurvey() {
     if (this.validateSurveyForm()) {
       this.$firebaseArray(this.$rootScope.appRef).$add({
-        "uid": this.$rootScope.user.uid,
-        "displayName": this.$rootScope.user.google.displayName,
-        "email": this.$rootScope.user.google.email,
+        "uid": this.authService.getUser().uid,
+        "displayName": this.authService.getUser().google.displayName,
+        "email": this.authService.getUser().google.email,
         "date": new Date().getTime(),
         "surveyId": this.currentSurvey.id,
         "answers": this.currentSurvey.answers
@@ -151,7 +156,8 @@ export class SurveyCtrl {
       totalItemCnt += cat.items.length;
     }
     if (this.currentSurvey.answers.length !== totalItemCnt) {
-      this.$rootScope.gcciMessage.alert(
+      console.log(this.GCCIMessage);
+      this.GCCIMessage.alert(
         "danger",
         "Incomplete Survey",
         "Please answer all questions on the survey."
@@ -162,4 +168,4 @@ export class SurveyCtrl {
   }
 }
 
-SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray"];
+SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray", "permissionService", "authService", "GCCIMessage"];

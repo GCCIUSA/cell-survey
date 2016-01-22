@@ -1,5 +1,5 @@
 import { router } from './router';
-import { ErrorService, UtilService, AuthService } from './service';
+import { ErrorService, UtilService, AuthService, PermissionService } from './service';
 import { gcciMessage } from './directives/gcci-message';
 import { MainCtrl, HomeCtrl } from './controllers/main';
 import { SurveyCtrl } from './controllers/survey';
@@ -87,6 +87,7 @@ app
 .service("errorService", ErrorService)
 .service("utilService", UtilService)
 .service("authService", AuthService)
+.service("permissionService", PermissionService)
 
 .directive("gcciMessage", gcciMessage)
 

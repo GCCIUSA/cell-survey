@@ -28,18 +28,18 @@
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li ng-class="{'active': vm.isActiveNav('home')}">
-            <a ui-sref="home">Home</a>
+            <a ui-sref="home">首頁</a>
           </li>
           <li ng-class="{'active': vm.isActiveNav('survey')}" ng-if="vm.showSurveyTab()">
-            <a ui-sref="survey">Survey</a>
+            <a ui-sref="survey">調查表</a>
           </li>
           <li class="dropdown" ng-class="{'active': vm.isActiveNav('report')}" ng-if="vm.showReportTab()">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">
-              Report <span class="caret"></span>
+              報表 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a ui-sref="report.qtr">Quarterly Report</a></li>
-              <li><a ui-sref="report.health">Health Report</a></li>
+              <li><a ui-sref="report.qtr">季度報表</a></li>
+              <li><a ui-sref="report.health">健康報表</a></li>
             </ul>
           </li>
         </ul>

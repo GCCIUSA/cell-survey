@@ -1,17 +1,20 @@
 export class ReportCtrl {
-    constructor($rootScope, utilService, $q, $http, $state, ModelAPI) {
+    constructor($rootScope, utilService, $q, $http, $state, ModelAPI, permissionService) {
       this.$rootScope = $rootScope;
       this.utilService = utilService;
       this.$q = $q;
       this.$http = $http;
       this.$state = $state;
       this.ModelAPI = ModelAPI;
+      this.permissionService = permissionService;
 
       this.init();
     }
 
     init() {
-      
+      if (!this.permissionService.canAccessReport()) {
+        this.permissionService.redirectHome();
+      }
 
       let surveyConfig = this.$http.get("survey.json");
       let surveyForms = this.$http.get("forms.json");
@@ -210,4 +213,4 @@ export class ReportCtrl {
     }
 }
 
-ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state", "ModelAPI"];
+ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state", "ModelAPI", "permissionService"];

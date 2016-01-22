@@ -1,10 +1,9 @@
 export class MainCtrl {
-  constructor($state, authService, $rootScope, GCCIMessage, utilService) {
+  constructor($state, authService, permissionService, GCCIMessage) {
     this.$state = $state;
     this.authService = authService;
-    this.$rootScope = $rootScope;
+    this.permissionService = permissionService;
     this.GCCIMessage = GCCIMessage;
-    this.utilService = utilService;
 
     this.init();
   }
@@ -22,7 +21,7 @@ export class MainCtrl {
   }
 
   getUserDisplayName() {
-    return this.$rootScope.user.google.displayName;
+    return this.authService.getUser().google.displayName;
   }
 
   logout() {
@@ -31,15 +30,15 @@ export class MainCtrl {
   }
 
   showSurveyTab() {
-    return this.authService.isLoggedIn() && this.utilService.userHasLevels(["小組"]);
+    return this.permissionService.canAccessSurvey();
   }
 
   showReportTab() {
-    return this.authService.isLoggedIn() && this.utilService.userHasLevels(["牧區", "區", "實習區"]);
+    return this.permissionService.canAccessReport();
   }
 }
 
-MainCtrl.$inject = ["$state", "authService", "$rootScope", "GCCIMessage", "utilService"];
+MainCtrl.$inject = ["$state", "authService", "permissionService", "GCCIMessage"];
 
 export class HomeCtrl {
   constructor() {
