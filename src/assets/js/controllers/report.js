@@ -182,10 +182,7 @@ export class ReportCtrl {
             let surveyForm = this.surveyForms[0].form;
             for (let catIndex = 0; catIndex < surveyForm.length; catIndex++) {
               let catScore = 0;
-              let catAnswers = survey.answers.filter(x => parseInt(x.split(",")[0]) === catIndex);
-              for (let catAnswer of catAnswers) {
-                catScore += parseInt(catAnswer.split(",")[2]);
-              }
+              survey.answers.filter(x => parseInt(x.split(",")[0]) === catIndex).map(x => catScore += parseInt(x.split(",")[2]));
 
               statsPeriodData.dataPoints.push({
                 "label": surveyForm[catIndex].title,
