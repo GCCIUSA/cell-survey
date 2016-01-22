@@ -59,7 +59,10 @@ export class AuthService {
               this.GCCIMessage.alert(
                 "danger",
                 "Authentication Timeout",
-                "Authentication timed out, please login again."
+                "Authentication timed out, please login again.",
+                () => {
+                  this.login()
+                }
               );
             }
             else {

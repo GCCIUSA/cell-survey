@@ -21,7 +21,7 @@
       <tbody>
         <!-- categories -->
         <tr ng-repeat-start="category in ::vm.currentSurvey.form">
-          <td colspan="8" class="category" align="left">
+          <td colspan="8" class="category">
             {{::category.title}}
             <div class="pull-right">
               {{vm.categoryScoreLabel(vm.categoryScore[$index.toString()])}}
