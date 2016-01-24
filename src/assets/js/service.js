@@ -44,11 +44,14 @@ export class AuthService {
               this.setUser(authData);
               deferred.resolve();
             }).fail(() => { // user not in gcci model
-              this.unsetUser();
+              this.logout();
               this.GCCIMessage.alert(
                 "danger",
                 "Authentication Failed",
-                "Authentication failed, please contact administrator for access."
+                "Authentication failed, please contact administrator for access.",
+                () => {
+                  window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+                }
               );
               deferred.reject();
             });
