@@ -32,6 +32,7 @@ export class ModelAPI {
           }
         }
         if (nodes.length > 0) {
+          this._sort(nodes);
           deferred.resolve(nodes);
         }
         else {

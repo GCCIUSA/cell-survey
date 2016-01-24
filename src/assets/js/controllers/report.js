@@ -1,5 +1,5 @@
 export class ReportCtrl {
-  constructor($rootScope, utilService, $q, $http, $state, ModelAPI, permissionService) {
+  constructor($rootScope, utilService, $q, $http, $state, ModelAPI, permissionService, authService) {
     this.$rootScope = $rootScope;
     this.utilService = utilService;
     this.$q = $q;
@@ -7,6 +7,7 @@ export class ReportCtrl {
     this.$state = $state;
     this.ModelAPI = ModelAPI;
     this.permissionService = permissionService;
+    this.authService = authService;
 
     this.init();
   }
@@ -57,8 +58,9 @@ export class ReportCtrl {
               this.genQtrChart(3);
             }
             else if (this.$state.current.name === "report.health") {
-              this.genHealthChart();
-              this.genHealthChart(true);
+              this.genHealthChart(0, $("#healthChart"));
+              this.genHealthChart(1, $("#health1Chart"));
+              this.genHealthChart(2, $("#health2Chart"));
             }
             else if (this.$state.current.name === "report.category") {
               this.genCategoryChart(3);
@@ -69,7 +71,6 @@ export class ReportCtrl {
     });
 
     this.fontSize = 16;
-    this.titleSize = 30;
   }
 
   genQtrChart(numQtr) {
@@ -131,10 +132,6 @@ export class ReportCtrl {
 
     let chartHeight = chartData[0].dataPoints.length * chartData.length * 30 + 120;
     $("#qtrChart").css("height", `${chartHeight}px`).CanvasJSChart({
-      "title": {
-        "text": "季度報表",
-        "fontSize": this.titleSize,
-      },
       "animationEnabled": true,
       "axisY": {
         "minimum": 0,
@@ -147,7 +144,8 @@ export class ReportCtrl {
         "interval": 1
       },
       "legend": {
-        "fontSize": this.fontSize
+        "fontSize": this.fontSize,
+        "verticalAlign": "top"
       },
       "dataPointMaxWidth": 20,
       "data": chartData
@@ -202,7 +200,7 @@ export class ReportCtrl {
 
     $("#cellCategoryChart").CanvasJSChart({
       "title": {
-        "text": "分類統計",
+        "text": "小家健康分項明細表",
         "fontSize": 22,
       },
       "animationEnabled": true,
@@ -216,7 +214,8 @@ export class ReportCtrl {
         "labelFontSize": this.fontSize
       },
       "legend": {
-        "fontSize": this.fontSize
+        "fontSize": this.fontSize,
+        "verticalAlign": "top"
       },
       "data": chartData
     });
@@ -259,12 +258,7 @@ export class ReportCtrl {
       index++;
     }
 
-    $("#categoryChart").CanvasJSChart({
-      "title": {
-        "text": "分類統計",
-        "fontSize": this.titleSize,
-      },
-      "animationEnabled": true,
+    $("#categoryChart").CanvasJSChart({"animationEnabled": true,
       "axisY": {
         "minimum": 0,
         "maximum": 24,
@@ -275,13 +269,17 @@ export class ReportCtrl {
         "labelFontSize": this.fontSize
       },
       "legend": {
-        "fontSize": this.fontSize
+        "fontSize": this.fontSize,
+        "verticalAlign": "top"
       },
       "data": chartData
     });
   }
 
-  genHealthChart(isPrev) {
+  genHealthChart(numPrev, container) {
+    if (this.surveyConfig.length <= numPrev) {
+      return;
+    }
     let chartData = [{
       "type": "pie",
       "indexLabel": "{label} #percent% ({y})",
@@ -290,7 +288,7 @@ export class ReportCtrl {
 			"toolTipContent": "#percent% ({y})",
       "dataPoints": []
     }];
-    let currentSurvey = this.surveyConfig[this.surveyConfig.length - (isPrev ? 2 : 1)];
+    let currentSurvey = this.surveyConfig[this.surveyConfig.length - numPrev - 1];
 
     let healthData = {
       "very_unhealth": [0, "很不健康"],
@@ -328,10 +326,10 @@ export class ReportCtrl {
       })
     }
 
-    $(isPrev ? "#healthChartPrevQtr" : "#healthChart").CanvasJSChart({
+    container.CanvasJSChart({
       "title": {
-        "text": `健康報表 (${currentSurvey.statsPeriod})`,
-        "fontSize": this.titleSize,
+        "text": currentSurvey.statsPeriod,
+        "fontSize": 22,
       },
       "animationEnabled": true,
       "data": chartData
@@ -369,4 +367,4 @@ export class ReportCtrl {
   }
 }
 
-ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state", "ModelAPI", "permissionService"];
+ReportCtrl.$inject = ["$rootScope", "utilService", "$q", "$http", "$state", "ModelAPI", "permissionService", "authService"];
