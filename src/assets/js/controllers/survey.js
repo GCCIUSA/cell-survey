@@ -166,6 +166,12 @@ export class SurveyCtrl {
     }
     return true;
   }
+
+  healthStatusLabel() {
+    if (Array.isArray(this.currentSurvey.answers) && this.currentSurvey.answers.length > 0) {
+      return `(${this.utilService.healthStatus(this.totalScore)})`;
+    }
+  }
 }
 
 SurveyCtrl.$inject = ["$http", "$rootScope", "$q", "utilService", "$firebaseArray", "permissionService", "authService", "GCCIMessage"];

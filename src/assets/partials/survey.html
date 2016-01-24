@@ -44,9 +44,9 @@
       </tbody>
     </table>
     <div class="alert alert-success">
-      <div class="pull-right">總分數 {{vm.totalScore}}</div>
+      <div class="pull-right">總分數 {{vm.totalScore}} {{vm.healthStatusLabel()}}</div>
       <div class="clearfix"></div>
     </div>
-    <button class="btn btn-primary pull-right hidden-print" ng-click="vm.submitSurvey()" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === true">Submit Survey</button>
+    <button class="btn btn-primary pull-right hidden-print" ng-click="vm.submitSurvey()" ng-if="vm.currentSurvey.isSubmitted === false && vm.currentSurvey.isOpen === true">提交</button>
     <div class="clearfix"></div>
   </div>

@@ -290,39 +290,22 @@ export class ReportCtrl {
     }];
     let currentSurvey = this.surveyConfig[this.surveyConfig.length - numPrev - 1];
 
-    let healthData = {
-      "very_unhealth": [0, "很不健康"],
-      "unhealthy": [0, "不健康"],
-      "somewhat_healty": [0, "尚且健康"],
-      "healty": [0, "健康"],
-      "very_healthy": [0, "非常健康"]
-    };
     let totalSurveyCount = 0;
+    let healthData = {};
+    for (let i = 1; i <= 100; i+=20) {
+      healthData[this.utilService.healthStatus(i)] = 0;
+    }
     for (let survey of this.reportData) {
       if (survey.surveyId === currentSurvey.id) {
-        if (survey.totalScore > 80) {
-          healthData["very_healthy"][0]++;
-        }
-        else if (survey.totalScore > 60) {
-          healthData["healty"][0]++;
-        }
-        else if (survey.totalScore > 40) {
-          healthData["somewhat_healty"][0]++;
-        }
-        else if (survey.totalScore > 20) {
-          healthData["unhealthy"][0]++;
-        }
-        else {
-          healthData["very_unhealth"][0]++;
-        }
+        healthData[this.utilService.healthStatus(survey.totalScore)]++;
         totalSurveyCount++;
       }
     }
 
     for (let healthStatus of Object.keys(healthData)) {
       chartData[0].dataPoints.push({
-        "y": healthData[healthStatus][0],
-        "label": healthData[healthStatus][1]
+        "y": healthData[healthStatus],
+        "label": healthStatus
       })
     }
 

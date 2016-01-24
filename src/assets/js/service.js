@@ -155,6 +155,13 @@ export class UtilService {
     }
   }
 
+  healthStatus(score) {
+    return score > 80 ? "非常健康" :
+           score > 60 ? "健康" :
+           score > 40 ? "尚且健康" :
+           score > 20 ? "不健康" : "很不健康";
+  }
+
   setLocaleDate(val, isEnd = false) {
     if (val) {
       let d = new Date(),
