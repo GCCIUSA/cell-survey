@@ -1,24 +1,24 @@
 <div id="reportCharts">
   <div ng-if="vm.$state.current.name === 'report.qtr'">
-    <h2 class="text-center">{{vm.authService.getUser().models[0].title}}小家健康季度比較</h2>
+    <h2 class="text-center">{{vm.getLevelTitle()}}小家健康季度比較</h2>
     <div id="qtrChart"></div>
   </div>
 
   <div ng-if="vm.$state.current.name === 'report.health'">
-    <h2 class="text-center">{{vm.authService.getUser().models[0].title}}小家健康分佈圖</h2>
+    <h2 class="text-center">{{vm.getLevelTitle()}}小家健康分佈圖</h2>
     <div>
-      <div id="healthChart" style="width: 100%; height: 400px;"></div>
+      <div id="healthChart" style="height: 400px;"></div>
     </div>
     <div>
-      <div id="health1Chart" style="width: 100%; height: 400px;"></div>
+      <div id="health1Chart" style="height: 400px;"></div>
     </div>
     <div>
-      <div id="health2Chart" style="width: 100%; height: 400px;"></div>
+      <div id="health2Chart" style="height: 400px;"></div>
     </div>
   </div>
 
   <div ng-if="vm.$state.current.name === 'report.category'">
-    <h2 class="text-center">{{vm.authService.getUser().models[0].title}}小家健康分項平均值</h2>
+    <h2 class="text-center">{{vm.getLevelTitle()}}小家健康分項平均值</h2>
     <div id="categoryChart"></div>
   </div>
 </div>

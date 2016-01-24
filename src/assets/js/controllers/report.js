@@ -37,6 +37,7 @@ export class ReportCtrl {
             let dReportData = [];
             for (let surveyDataItem of surveyData) {
               if (this.utilService.getAttr(descendant, "leaders", "").indexOf(surveyDataItem.uid) >= 0) {
+                surveyDataItem.model = descendant;
                 dReportData.push(surveyDataItem);
               }
             }
@@ -285,28 +286,30 @@ export class ReportCtrl {
       "indexLabel": "{label} #percent% ({y})",
       "indexLabelFontSize": this.fontSize,
 			"percentFormatString": "#0.##",
-			"toolTipContent": "#percent% ({y})",
+			"toolTipContent": "{cellNames}",
       "dataPoints": []
     }];
     let currentSurvey = this.surveyConfig[this.surveyConfig.length - numPrev - 1];
 
-    let totalSurveyCount = 0;
     let healthData = {};
+    let healthCell = {};
     for (let i = 1; i <= 100; i+=20) {
       healthData[this.utilService.healthStatus(i)] = 0;
+      healthCell[this.utilService.healthStatus(i)] = [];
     }
     for (let survey of this.reportData) {
       if (survey.surveyId === currentSurvey.id) {
         healthData[this.utilService.healthStatus(survey.totalScore)]++;
-        totalSurveyCount++;
+        healthCell[this.utilService.healthStatus(survey.totalScore)].push(survey.model.title);
       }
     }
 
     for (let healthStatus of Object.keys(healthData)) {
       chartData[0].dataPoints.push({
         "y": healthData[healthStatus],
-        "label": healthStatus
-      })
+        "label": healthStatus,
+        "cellNames": healthCell[healthStatus].join("<br/>")
+      });
     }
 
     container.CanvasJSChart({
@@ -316,7 +319,7 @@ export class ReportCtrl {
       },
       "animationEnabled": true,
       "data": chartData
-    })
+    });
   }
 
   isSelectedAnswer(categoryIndex, itemIndex, optionIndex) {
@@ -347,6 +350,11 @@ export class ReportCtrl {
 
   categoryScoreLabel(score = 0) {
     return `${score}分`;
+  }
+
+  getLevelTitle() {
+    let model = this.authService.getUser().models[0];
+    return `${model.title}${model.level}`;
   }
 }
 
