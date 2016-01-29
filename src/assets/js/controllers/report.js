@@ -109,6 +109,7 @@ export class ReportCtrl {
           "indexLabelFontColor": "#000",
           "indexLabelFontSize": this.fontSize,
           "dataPoints": [],
+          "toolTipContent": `${surveyVer.statsPeriod}: {y}分`,
           "click": showDetail
         };
         for (let descendant of this.descendants) {
