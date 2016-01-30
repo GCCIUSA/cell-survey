@@ -309,7 +309,8 @@ export class ReportCtrl {
       chartData[0].dataPoints.push({
         "y": healthData[healthStatus],
         "label": healthStatus,
-        "cellNames": healthCell[healthStatus].join("<br/>")
+        "cellNames": healthCell[healthStatus].join("<br/>"),
+        "color": this.utilService.healthColor(healthStatus)
       });
     }
 
