@@ -1,5 +1,5 @@
 {
-  "firebase": "gcci-cell-survey",
+  "firebase": "gcci-t-cell-survey",
   "public": "src",
   "ignore": [
     "firebase.json",

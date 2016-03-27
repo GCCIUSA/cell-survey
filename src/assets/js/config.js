@@ -10,8 +10,8 @@ import { ModelAPI } from '../libs/model-api/api';
 var app = angular.module("app", ["ngSanitize", "ui.router", "firebase"]);
 
 app.constant("REF", {
-  "APP_REF": new Firebase("https://gcci-cell-survey.firebaseio.com"),
-  "MODEL_REF": new Firebase("https://gcci-model.firebaseio.com")
+  "APP_REF": new Firebase("https://gcci-t-cell-survey.firebaseio.com"),
+  "MODEL_REF": new Firebase("https://gcci-t-structure-model.firebaseio.com")
 });
 
 app.config(["$httpProvider", ($httpProvider) => {
