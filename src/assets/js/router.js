@@ -21,6 +21,11 @@ export function router($stateProvider, $urlRouterProvider, $uiViewScrollProvider
     "resolve": {}
   })
 
+  .state("instruction", {
+    "url": "/instruction",
+    "templateUrl": url("instruction")
+  })
+
   .state("report", {
     "url": "/report",
     "template": "<ui-view></ui-view>",

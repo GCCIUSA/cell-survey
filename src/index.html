@@ -23,7 +23,8 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="">GCCI小家健康調查表</a>
+        <!--<a class="navbar-brand" href="">GCCI小家健康調查表</a>-->
+        <a class="navbar-brand" ui-sref="home">GCCI小家健康調查表</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -43,6 +44,9 @@
               <li><a ui-sref="report.category">分項平均值</a></li>
             </ul>
           </li>
+          <li ng-class="{'active': vm.isActiveNav('instruction')}">
+            <a ui-sref="instruction">使用說明</a>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right" ng-switch on="vm.authService.isLoggedIn()">
           <li class="dropdown" ng-switch-when="true">
@@ -55,7 +59,7 @@
             </ul>
           </li>
           <li ng-switch-when="false">
-            <a href="" ng-click="vm.authService.login()"><strong class="text-danger">牧養同工登入</strong></a>
+            <a href="" ng-click="vm.authService.login()"><button type="button" class="btn btn-info">牧養同工登入</button></a>
           </li>
         </ul>
       </div><!--/.nav-collapse -->

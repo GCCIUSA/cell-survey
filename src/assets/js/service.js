@@ -108,6 +108,7 @@ export class AuthService {
   logout() {
     this.Auth.$unauth();
     this.unsetUser();
+    window.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://cell-survey.thegcci.org/";
   }
 
   isLoggedIn() {
