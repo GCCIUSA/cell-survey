@@ -2,10 +2,16 @@
 
 <div ng-switch on="vm.authService.isLoggedIn()">
   <div ng-switch-when="true">
-    <a ui-sref="survey"><button type="button" class="btn btn-info btn-lg"><img src="assets/gen/imgs/3d-people-checklist.png" class="img-circle" alt="" width="200" height="200"><br>小家調查表</button></a>
-    <br><br>如有任何使用上的問題或哪邊需要改進的地方，請Email聯繫<a href="mailto:jimmy.wang.@thegcci.org?subject=[問題回報]小家健康調查表"><strong>教牧同工</strong></a>
+    <div class="text-center">
+      <a ui-sref="survey">
+        <button type="button" class="btn btn-info btn-lg">
+          <img src="assets/gen/imgs/3d-people-checklist.png" class="img-circle" alt="" width="200" height="200"><br><br>
+          填寫小家調查表
+        </button>
+      </a>
+    </div>
   </div>
-  <div ng-switch-when="false">
-    <img src="assets/gen/imgs/survey2.jpg" alt="" class="container">
+  <div ng-switch-when="false" class="text-center">
+    <img src="assets/gen/imgs/survey2.jpg" alt="" width="800">
   </div>
 </div>

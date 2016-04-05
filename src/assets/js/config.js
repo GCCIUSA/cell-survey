@@ -67,7 +67,7 @@ app.run(["$rootScope", "REF", ($rootScope, REF) => {
             deferred.resolve();
           },
           () => {
-            if (toState.name === "home") {
+            if (toState.name === "home" || toState.name === "instruction") {
               deferred.resolve();
             }
             else {

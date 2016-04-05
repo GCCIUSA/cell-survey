@@ -50,7 +50,7 @@ export class AuthService {
                 "Authentication Failed",
                 "Authentication failed, please contact administrator for access.",
                 () => {
-                  window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+                  this.logoutRedirect();
                 }
               );
               deferred.reject();
@@ -105,10 +105,16 @@ export class AuthService {
     });
   }
 
-  logout() {
+  logout(redirect=false) {
     this.Auth.$unauth();
     this.unsetUser();
-    window.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://cell-survey.thegcci.org/";
+    if (redirect) {
+      this.logoutRedirect();
+    }
+  }
+  
+  logoutRedirect() {
+    window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
   }
 
   isLoggedIn() {

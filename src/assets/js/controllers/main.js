@@ -25,8 +25,7 @@ export class MainCtrl {
   }
 
   logout() {
-    this.authService.logout();
-    this.$state.go("home");
+    this.authService.logout(true);
   }
 
   showSurveyTab() {
