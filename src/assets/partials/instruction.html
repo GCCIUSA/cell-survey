@@ -1,16 +1,16 @@
-<!--<img src="assets/gen/imgs/GCCI.png" alt="">
+<!--<img src="assets/gen/imgs/GCCI.jpg" alt="">
 <button type="button" class="btn btn-default"><a href="https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://cell-survey.thegcci.org/">登出</a>"</button>-->
 <div class="row">
-  <div class="container col-md-4">
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accountnotice"><img src="assets/gen/imgs/3d-people-reading.png" class="img-circle" alt="" width="200" height="200">
+  <div class="container col-md-3">
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accountnotice"><img src="assets/gen/imgs/3d-people-reading.jpg" class="img-circle" alt="" width="180" height="180">
       <br />
-      <br />帳號使用須知</button>
+      <br />牧養同工須知</button>
     <div class="modal fade" id="accountnotice" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">GCCI牧養同工Google Account使用原則</h4>
+            <h4 class="modal-title"><strong>牧養同工</strong>帳戶使用原則</h4>
           </div>
           <div class="modal-body">
             <ol type="1">
@@ -32,17 +32,80 @@
             </ol>
           </div>
           <div class="modal-footer">
+            <a href="" ng-click="vm.authService.login()" class="btn btn-primary" role="button">登入</a>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="container col-md-4">
+  <div class="container col-md-3">
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#loginissue">
+      <img src="assets/gen/imgs/3d-people-help.jpg" class="img-circle" alt="" width="180" height="180">
+      <br />
+      <br />登入問題與教學
+    </button>
+    <div class="modal fade" id="loginissue" role="dialog">
+      <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">登入教學</h4>
+          </div>
+          <div class="modal-body">
+            <fieldset>
+              <legend>登入按鈕位子</legend>
+              <p>教牧同工登入按鈕位於網頁的右上角</p>
+              <div class="text-center">
+                <img class="img-thumbnail" src="assets/gen/imgs/gcci-home.jpg" alt="">
+              </div>
+            </fieldset>
+            <br>
+            <br>
+
+            <fieldset>
+              <legend>如有私人信箱以存在的情況下會出現已下畫面</legend>
+              <div class="text-center">
+                <p>假如沒有出現這個問題直接以<strong class="text-success">牧養同工信箱</strong>登入即可</p>
+                <div class="col-md-6">
+                  <p><strong>點擊下方以不同帳號登入</strong></p>
+                  <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-p1.jpg" alt="">
+                </div>
+                <div class="col-md-6">
+                  <p><strong>點擊下方的新增帳號</strong></p>
+                  <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-p2.jpg" alt="">
+                </div>
+              </div>
+            </fieldset>
+            <br>
+            <br>
+
+            <fieldset>
+              <legend>以牧養同工信箱登入</legend>
+              <div class="text-center">
+                <div class="col-md-6">
+                  <p><strong>填寫信箱</strong></p>
+                  <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-gcci1.jpg" alt="">
+                </div>
+                <div class="col-md-6">
+                  <p><strong>輸入密碼</strong></p>
+                  <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-gcci2.jpg" alt="">
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container col-md-3">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#samplesurvey">
-      <img src="assets/gen/imgs/3d-people-checklist.png" class="img-circle" alt="" width="200" height="200">
+      <img src="assets/gen/imgs/3d-people-checklist.jpg" class="img-circle" alt="" width="180" height="180">
       <br/>
-      <br/>小家調查表簡介
+      <br/>小家長專區
     </button>
     <div class="modal fade" id="samplesurvey" role="dialog">
       <div class="modal-dialog" style="width: 800px;">
@@ -52,7 +115,7 @@
             <h4 class="modal-title">小家調查表簡介</h4>
           </div>
           <div class="modal-body">
-            <img class="img-responsive" src="assets/gen/imgs/survey-step.png" alt="">
+            <img class="img-responsive" src="assets/gen/imgs/survey-step.jpg" alt="">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -61,45 +124,45 @@
       </div>
     </div>
   </div>
-  <div class="container col-md-4">
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#loginissue">
-      <img src="assets/gen/imgs/3d-people-help.png" class="img-circle" alt="" width="200" height="200">
-      <br />
-      <br />登入問題
+  <div class="container col-md-3">
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#surveyreport">
+      <img src="assets/gen/imgs/3d-people-carryacross.jpg" class="img-circle" alt="" width="180" height="180">
+      <br/>
+      <br/>區牧區長專區
     </button>
-    <div class="modal fade" id="loginissue" role="dialog">
+    <div class="modal fade" id="surveyreport" role="dialog">
       <div class="modal-dialog" style="width: 800px;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">登入問題</h4>
+            <h4 class="modal-title">區牧區長報表簡介</h4>
           </div>
           <div class="modal-body">
-            <fieldset>
-              <legend>登入方法</legend>
-              <div class="text-center">
-                <img class="img-thumbnail" src="assets/gen/imgs/gcci-home.png" alt="">
-              </div>
-            </fieldset>
-            <br><br>
+            <div class="container col-md-4"><a ng-click="aField=true; bField=false; cField=false;" class="btn btn-info btn-lg btn-block col-md-11" role="button">分布圖</a></div>
+            <div class="container col-md-4"><a ng-click="aField=false; bField=true; cField=false;" class="btn btn-info btn-lg btn-block col-md-11" role="button">季度比較</a></div>
+            <div class="container col-md-4"><a ng-click="aField=false; bField=false; cField=true;" class="btn btn-info btn-lg btn-block col-md-11" role="button">分項平均值</a></div>
+            <legend><br>健康報表</legend>
+            <img class="img-responsive" src="assets/gen/imgs/report-nav.jpg">
+            <div ng-show="aField"><legend>分布圖</legend>
+              <img class="img-responsive" src="assets/gen/imgs/report-1.jpg" alt="">
 
-            <fieldset>
-              <legend>如有私人信箱以存在的情況下會出現已下畫面</legend>
-              <div class="text-center">
-                <p>假如沒有出現這個問題直接以GCCI信箱登入即可</p>
-                <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-p1.png" alt="" width="48%">
-                <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-p2.png" alt="" width="48%">
-              </div>
-            </fieldset>
-            <br><br>
-
-            <fieldset>
-              <legend>以牧養同工信箱登入</legend>
-              <div class="text-center">
-                <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-gcci1.png" alt="" width="48%">
-                <img class="img-thumbnail img-responsive" src="assets/gen/imgs/google-gcci2.png" alt="" width="48%">
-              </div>
-            </fieldset>
+            </div>
+            <div ng-show="bField"><legend>季度比較</legend>
+              <img class="img-responsive" src="assets/gen/imgs/report-2.jpg" alt="">
+              <ul><li>點擊橫條可查看小家所填寫的表格</li></ul>
+              <legend></legend>
+              <legend>小家完成的報表</legend>
+              <img class="img-responsive" src="assets/gen/imgs/report-2-inside-f.jpg" alt="">
+            </div>
+            <div ng-show="cField"><legend>分項平均值</legend>
+              <img class="img-responsive" src="assets/gen/imgs/report-3.jpg" alt="">
+              <h3>平均值可看到所屬牧區or實習區的強項與需補足的地方</h3>
+              <ul>
+                <li>小家聚會的平均值來看整個牧區屬於非常健康的</li>
+                <li>小組架構屬於健康，但還有加強空間</li>
+                <li>對內裝備與對外傳福音的平均值就有待加強，實習區長或區長應幫助各個小家在這方面的幫助</li>
+              </ul>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

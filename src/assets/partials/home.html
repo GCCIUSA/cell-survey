@@ -1,14 +1,36 @@
-
-
 <div ng-switch on="vm.authService.isLoggedIn()">
   <div ng-switch-when="true">
-    <div class="text-center">
-      <a ui-sref="survey">
-        <button type="button" class="btn btn-info btn-lg">
-          <img src="assets/gen/imgs/3d-people-checklist.png" class="img-circle" alt="" width="200" height="200"><br><br>
-          填寫小家調查表
-        </button>
-      </a>
+    <div class="row">
+      <div class="text-center container">
+        <a ui-sref="survey" class="btn btn-info btn-lg" role="button">
+          <img src="assets/gen/imgs/3d-people-checklist.jpg" class="img-circle" alt="" width="180" height="180">
+          <br>
+          <br> 填寫小家調查表
+        </a>
+        <p>此功能只給小家長能使用</p>
+        <p>區牧實習區長無法使用</p>
+      </div>
+      <!--<div class="text-center container col-md-3">
+        <a ui-sref="report.health" class="btn btn-info btn-lg" role="button">
+          <img src="assets/gen/imgs/gcci-logo.jpg" class="img-circle" alt="" width="180" height="180">
+          <br>
+          <br> 分布圖
+        </a>
+      </div>
+      <div class="text-center container col-md-3">
+        <a ui-sref="report.qtr" class="btn btn-info btn-lg" role="button">
+          <img src="assets/gen/imgs/gcci-logo.jpg" class="img-circle" alt="" width="180" height="180">
+          <br>
+          <br> 季度比較
+        </a>
+      </div>
+      <div class="text-center container col-md-3">
+        <a ui-sref="report.category" class="btn btn-info btn-lg" role="button">
+          <img src="assets/gen/imgs/gcci-logo.jpg" class="img-circle" alt="" width="180" height="180">
+          <br>
+          <br> 分項平均值
+        </a>
+      </div>-->
     </div>
   </div>
   <div ng-switch-when="false" class="text-center">
