@@ -1,7 +1,7 @@
 <!--<img src="assets/gen/imgs/GCCI.jpg" alt="">
 <button type="button" class="btn btn-default"><a href="https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://cell-survey.thegcci.org/">登出</a>"</button>-->
 <div class="row">
-  <div class="container col-md-3">
+  <div class="col-md-3">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accountnotice"><img src="assets/gen/imgs/3d-people-reading.jpg" class="img-circle" alt="" width="180" height="180">
       <br />
       <br />牧養同工須知</button>
@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-  <div class="container col-md-3">
+  <div class="col-md-3">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#loginissue">
       <img src="assets/gen/imgs/3d-people-help.jpg" class="img-circle" alt="" width="180" height="180">
       <br />
@@ -101,7 +101,7 @@
       </div>
     </div>
   </div>
-  <div class="container col-md-3">
+  <div class="col-md-3">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#samplesurvey">
       <img src="assets/gen/imgs/3d-people-checklist.jpg" class="img-circle" alt="" width="180" height="180">
       <br/>
@@ -124,7 +124,8 @@
       </div>
     </div>
   </div>
-  <div class="container col-md-3">
+
+  <div class="col-md-3">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#surveyreport">
       <img src="assets/gen/imgs/3d-people-carryacross.jpg" class="img-circle" alt="" width="180" height="180">
       <br/>
@@ -138,32 +139,60 @@
             <h4 class="modal-title">區牧區長報表簡介</h4>
           </div>
           <div class="modal-body">
-            <div class="container col-md-4"><a ng-click="aField=true; bField=false; cField=false;" class="btn btn-info btn-lg btn-block col-md-11" role="button">分布圖</a></div>
-            <div class="container col-md-4"><a ng-click="aField=false; bField=true; cField=false;" class="btn btn-info btn-lg btn-block col-md-11" role="button">季度比較</a></div>
-            <div class="container col-md-4"><a ng-click="aField=false; bField=false; cField=true;" class="btn btn-info btn-lg btn-block col-md-11" role="button">分項平均值</a></div>
-            <legend><br>健康報表</legend>
-            <img class="img-responsive" src="assets/gen/imgs/report-nav.jpg">
-            <div ng-show="aField"><legend>分布圖</legend>
-              <img class="img-responsive" src="assets/gen/imgs/report-1.jpg" alt="">
+            <div class="row">
+              <div class="col-md-4">
+                <a ng-click="zoneIntroField = 'health';" class="btn btn-info btn-lg btn-block " role="button">分布圖</a>
+              </div>
+              <div class="col-md-4">
+                <a ng-click="zoneIntroField = 'qtrly'" class="btn btn-info btn-lg btn-block" role="button">季度比較</a>
+              </div>
+              <div class="col-md-4">
+                <a ng-click="zoneIntroField = 'category'" class="btn btn-info btn-lg btn-block" role="button">分項平均值</a>
+              </div>
+            </div>
+            <br>
+            <fieldset>
+              <legend>健康報表</legend>
+              <div>
+                <img class="img-responsive" src="assets/gen/imgs/report-nav.jpg" alt="">
+              </div>
+            </fieldset>
 
-            </div>
-            <div ng-show="bField"><legend>季度比較</legend>
-              <img class="img-responsive" src="assets/gen/imgs/report-2.jpg" alt="">
-              <ul><li>點擊橫條可查看小家所填寫的表格</li></ul>
-              <legend></legend>
+            <fieldset ng-if="zoneIntroField === 'health';">
+              <legend>分布圖</legend>
+              <div>
+                <img class="img-responsive" src="assets/gen/imgs/report-1.jpg" alt="">
+              </div>
+            </fieldset>
+
+            <fieldset ng-if="zoneIntroField === 'qtrly'">
+              <legend>季度比較</legend>
+              <div>
+                <img class="img-responsive" src="assets/gen/imgs/report-2.jpg" alt="">
+                <ul><li>點擊橫條可查看小家所填寫的表格</li></ul>
+              </div>
+            </fieldset>
+
+            <fieldset ng-if="zoneIntroField === 'qtrly'">
               <legend>小家完成的報表</legend>
-              <img class="img-responsive" src="assets/gen/imgs/report-2-inside-f.jpg" alt="">
-            </div>
-            <div ng-show="cField"><legend>分項平均值</legend>
-              <img class="img-responsive" src="assets/gen/imgs/report-3.jpg" alt="">
-              <ul>
-                <li>分項平均值是所屬牧區或實習區的全部小家該項分數的平均值</li>
-                <li>區牧/區長/實習區長可以看到各小家整體的強項或需要補足的地方，以便在牧區中做適當的改進。</li>
-                <!--<li>小家聚會的平均值來看整個牧區屬於非常健康的</li>
-                <li>小組架構屬於健康，但還有加強空間</li>
-                <li>對內裝備與對外傳福音的平均值就有待加強，實習區長或區長應幫助各個小家在這方面的幫助</li>-->
-              </ul>
-            </div>
+              <div>
+                <img class="img-responsive" src="assets/gen/imgs/report-2-inside-f.jpg" alt="">
+              </div>
+            </fieldset>
+
+            <fieldset ng-if="zoneIntroField === 'category'">
+              <legend>分項平均值</legend>
+              <div>
+                <img class="img-responsive" src="assets/gen/imgs/report-3.jpg" alt="">
+                <ul>
+                  <li>分項平均值是所屬牧區或實習區的全部小家該項分數的平均值</li>
+                  <li>區牧/區長/實習區長可以看到各小家整體的強項或需要補足的地方，以便在牧區中做適當的改進。</li>
+                  <!--<li>小家聚會的平均值來看整個牧區屬於非常健康的</li>
+                  <li>小組架構屬於健康，但還有加強空間</li>
+                  <li>對內裝備與對外傳福音的平均值就有待加強，實習區長或區長應幫助各個小家在這方面的幫助</li>-->
+                </ul>
+              </div>
+            </fieldset>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

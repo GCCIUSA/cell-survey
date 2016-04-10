@@ -40,9 +40,10 @@ export class MainCtrl {
 MainCtrl.$inject = ["$state", "authService", "permissionService", "GCCIMessage"];
 
 export class HomeCtrl {
-  constructor(authService) {
+  constructor(authService, permissionService) {
     this.authService = authService;
+    this.permissionService = permissionService;
   }
 }
 
-HomeCtrl.$inject = ["authService"];
+HomeCtrl.$inject = ["authService", "permissionService"];
