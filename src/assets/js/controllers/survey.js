@@ -133,16 +133,19 @@ export class SurveyCtrl {
   */
   submitSurvey() {
     if (this.validateSurveyForm()) {
-      this.$firebaseArray(this.$rootScope.appRef).$add({
-        "uid": this.authService.getUser().uid,
-        "displayName": this.authService.getUser().google.displayName,
-        "email": this.authService.getUser().google.email,
-        "date": new Date().getTime(),
-        "surveyId": this.currentSurvey.id,
-        "answers": this.currentSurvey.answers
-      }).then(() => {
-        window.location.reload();
-      });
+      let cfm = confirm("Please confirm to submit the survey.");
+      if (cfm) {
+        this.$firebaseArray(this.$rootScope.appRef).$add({
+          "uid": this.authService.getUser().uid,
+          "displayName": this.authService.getUser().google.displayName,
+          "email": this.authService.getUser().google.email,
+          "date": new Date().getTime(),
+          "surveyId": this.currentSurvey.id,
+          "answers": this.currentSurvey.answers
+        }).then(() => {
+          window.location.reload();
+        });
+      }
     }
   }
 
@@ -156,7 +159,6 @@ export class SurveyCtrl {
       totalItemCnt += cat.items.length;
     }
     if (this.currentSurvey.answers.length !== totalItemCnt) {
-      console.log(this.GCCIMessage);
       this.GCCIMessage.alert(
         "danger",
         "Incomplete Survey",
