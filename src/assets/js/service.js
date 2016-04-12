@@ -172,17 +172,6 @@ export class UtilService {
            score > 20 ? "不健康" : "很不健康";
   }
 
-  healthColor(status) {
-    let health = {
-      "非常健康": "#360",
-      "健康": "#6cf",
-      "尚且健康": "#6c3",
-      "不健康": "#cc3",
-      "很不健康": "#630"
-    }
-    return health[status];
-  }
-
   setLocaleDate(val, isEnd = false) {
     if (val) {
       let d = new Date(),

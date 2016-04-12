@@ -203,7 +203,7 @@ export class ReportCtrl {
     $("#cellCategoryChart").CanvasJSChart({
       "title": {
         "text": "小家健康分項明細表",
-        "fontSize": 22,
+        "fontSize": 22
       },
       "animationEnabled": true,
       "axisY": {
@@ -235,7 +235,7 @@ export class ReportCtrl {
           "indexLabel": "{y}",
           "indexLabelFontColor": "#000",
           "indexLabelFontSize": this.fontSize,
-          "dataPoints": [],
+          "dataPoints": []
         };
 
 
@@ -309,15 +309,14 @@ export class ReportCtrl {
       chartData[0].dataPoints.push({
         "y": healthData[healthStatus],
         "label": healthStatus,
-        "cellNames": healthCell[healthStatus].join("<br/>"),
-        "color": this.utilService.healthColor(healthStatus)
+        "cellNames": healthCell[healthStatus].join("<br/>")
       });
     }
 
     container.CanvasJSChart({
       "title": {
         "text": currentSurvey.statsPeriod,
-        "fontSize": 22,
+        "fontSize": 22
       },
       "animationEnabled": true,
       "data": chartData
