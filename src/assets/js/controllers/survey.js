@@ -24,7 +24,7 @@ export class SurveyCtrl {
       this.currentSurvey = response[0].data[response[0].data.length - 1];
       this.currentSurvey.form = response[1].data.find(form => form.ver === this.currentSurvey.formVer).form;
 
-      this.$rootScope.appRef.orderByChild("uid").equalTo(this.authService.getUser().uid).once("value", (snapshot) => {
+      this.$rootScope.appRef.orderByChild("uid").equalTo(this.authService.getUser().providerId).once("value", (snapshot) => {
         // answers are string array in the format of i,j,k
         // i - category index, j - item index, k - option index
         // example: ["0,1,1", "0,2,1"]
@@ -136,7 +136,7 @@ export class SurveyCtrl {
       let cfm = confirm("Please confirm to submit the survey.");
       if (cfm) {
         this.$firebaseArray(this.$rootScope.appRef).$add({
-          "uid": this.authService.getUser().uid,
+          "uid": this.authService.getUser().providerId,
           "displayName": this.authService.getUser().google.displayName,
           "email": this.authService.getUser().google.email,
           "date": new Date().getTime(),

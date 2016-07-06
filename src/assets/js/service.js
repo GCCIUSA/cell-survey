@@ -39,8 +39,10 @@ export class AuthService {
         this.$http.get(url).then(
           () => { // google token is valid
             // get user node from GCCI structure model
-            this.ModelAPI.getNodeByUid(authData.auth.uid).then((nodes) => { // user in gcci model
+            let uid = `${authData.provider}:${authData.google.id}`;
+            this.ModelAPI.getNodeByUid(uid).then((nodes) => { // user in gcci model
               authData.models = nodes;
+              authData.providerId = uid; // firebase changed auth.uid to be unique string other than provider:id, putting this back in.
               this.setUser(authData);
               deferred.resolve();
             }).fail(() => { // user not in gcci model

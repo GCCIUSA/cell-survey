@@ -25,7 +25,7 @@ export class ReportCtrl {
 
       this.ModelAPI.getTree().then(tree => {
         // find current user's node with lowest depth (highest level)
-        let currentUserNodes = tree.filter(node => this.utilService.getAttr(node, "leaders", "").indexOf(this.$rootScope.user.uid) >= 0);
+        let currentUserNodes = tree.filter(node => this.utilService.getAttr(node, "leaders", "").indexOf(this.$rootScope.user.providerId) >= 0);
         let currentUserNode = currentUserNodes.sort((a, b) => a.depth - b.depth)[0];
 
         // find survey data for descendants of current user
