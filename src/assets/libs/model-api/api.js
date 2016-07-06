@@ -7,7 +7,7 @@ export class ModelAPI {
   constructor(ref) {
     this._ref = ref;
 
-    this._LEVELS = ["牧區", "區", "實習區", "小組", "福音站"];
+    this._LEVELS = ["大牧區", "牧區", "區", "實習區", "小組", "福音站"];
   }
 
   /**

@@ -211,7 +211,7 @@ export class PermissionService {
   }
 
   canAccessReport() {
-    return this.authService.isLoggedIn() && this.userHasLevels(["牧區", "區", "實習區"]);
+    return this.authService.isLoggedIn() && this.userHasLevels(["大牧區", "牧區", "區", "實習區"]);
   }
 
   redirectHome() {
