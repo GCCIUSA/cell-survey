@@ -10,5 +10,11 @@
     "formVer": 2,
     "openPeriod": ["2016-06-28", "2016-07-09"],
     "statsPeriod": "2016年第二季度"
+  },
+  {
+    "id": 3,
+    "formVer": 3,
+    "openPeriod": ["2016-11-01", "2016-11-12"],
+    "statsPeriod": "2016年第三季度"
   }
 ]

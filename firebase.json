@@ -1,12 +1,19 @@
 {
-  "firebase": "gcci-t-cell-survey",
-  "public": "src",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**",
-    "src/assets/js",
-    "src/assets/less",
-    "src/assets/libs"
-  ]
+  "hosting": {
+    "public": "src",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "src/assets/js",
+      "src/assets/less",
+      "src/assets/libs"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
